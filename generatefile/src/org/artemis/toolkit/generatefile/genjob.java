@@ -1,5 +1,19 @@
 /**
- * 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.artemis.toolkit.generatefile;
 
@@ -17,12 +31,18 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
+import org.artemis.toolkit.common.configparser;
+import org.artemis.toolkit.common.fileutils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author return_jun
  *
  */
 public class genjob implements Runnable {
-
+	private static final Logger LOG = LoggerFactory.getLogger(genjob.class);
+	
 	private filedefinition mfiledefinition;
 	private Random mRandom;
 	private int mColumnCount = 0;
@@ -37,6 +57,8 @@ public class genjob implements Runnable {
 	
 	private String mFilePath = "";
 	private long mRowsCount = 0;
+	
+	private boolean mInvalidColumnChecked = false;
 	
 	public genjob(filedefinition ifiledefinition) {
 		mfiledefinition = ifiledefinition;
@@ -66,7 +88,7 @@ public class genjob implements Runnable {
 		mRowsCount = irowcount;
 	}
 	
-	/* (non-Javadoc)
+	/** (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -74,7 +96,7 @@ public class genjob implements Runnable {
 		FileOutputStream lFileOutputStream = null;
 		PrintWriter lPrintWriter = null;
 		try {
-			initfile(mFilePath);
+			fileutils.initfile(mFilePath);
 			lFileOutputStream = new FileOutputStream(mFilePath, false);
 			lPrintWriter = new PrintWriter(lFileOutputStream);
 		} catch (IOException e) {
@@ -149,7 +171,11 @@ public class genjob implements Runnable {
 				break;
 				
 			default:
-				assert false;
+				if (!mInvalidColumnChecked) {
+					mInvalidColumnChecked = true;
+					LOG.warn("current column type " + mColumnType[iter] + " is not supported.");
+				}
+				break;
 			}
 		}
 		switch (mColumnType[mColumnCount - 1])
@@ -178,23 +204,6 @@ public class genjob implements Runnable {
 				assert false;
 			}
 		return lCurrentRow;
-	}
-	
-	private void initfile(String ifilepath) throws IOException {
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(ifilepath);
-		} catch (FileNotFoundException e) {
-			File lFile = new File(ifilepath);
-			if (!lFile.createNewFile()) {
-				throw e;
-			}
-			out = new FileOutputStream(lFile);
-		} finally {
-			if (out != null) {
-				out.close();
-			}
-		}
 	}
 
 }
