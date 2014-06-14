@@ -21,9 +21,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
-import java.lang.reflect.Modifier;
+
+import org.artemis.toolkit.table.analyticsops.order;
+import org.artemis.toolkit.table.datatype;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
@@ -46,8 +47,14 @@ public class configparser {
 		/**
 		 * pretty print, serialize null fields, ignore static, transient
 		 */
-		mGson = new GsonBuilder().setPrettyPrinting().serializeNulls()
-				//.excludeFieldsWithModifiers(Modifier.STATIC, Modifier.TRANSIENT)
+		mGson = new GsonBuilder()
+				.setPrettyPrinting()
+				.serializeNulls()
+				.setExclusionStrategies(new ignorestrategy(null))
+				.registerTypeAdapter(datatype.class, new dtSerializer())
+				.registerTypeAdapter(datatype.class, new dtDeserializer())
+				.registerTypeAdapter(order.class, new orderSerializer())
+				.registerTypeAdapter(order.class, new orderDeserializer())
 				.create();
 		
 		fileutils.initfile(iconfigfile);

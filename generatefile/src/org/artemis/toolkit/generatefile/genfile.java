@@ -20,8 +20,10 @@ package org.artemis.toolkit.generatefile;
 import java.util.Scanner;
 
 /**
+ * 
+ * genfile TODO
+ * genfile.java is written at Jun 15, 2014
  * @author return_jun
- *
  */
 public class genfile {
 	

@@ -15,25 +15,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.generatefile;
+package org.artemis.toolkit.common;
 
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 
 /**
- * lookuptable TODO
- * lookuptable.java is written at Jun 13, 2014
- * @author junli
+ * ignorestrategy which class and fields should be ignored when doing serialize and deserialize
+ * ignorestrategy.java is written at Jun 15, 2014
+ * @author return_jun
  */
-public class lookuptable {
+public class ignorestrategy implements ExclusionStrategy {
+	
+	private final Class<?> typeToSkip;
+	
+	public ignorestrategy(Class<?> itypetoskip) {
+		typeToSkip = itypetoskip;
+	}
+	
+	@Override
+	public boolean shouldSkipField(FieldAttributes f) {
+		return f.getAnnotation(ignore.class) != null;
+	}
 
-	@SerializedName("lookuptbl_name") private String mLUTableName = "";
-	
-	public void settblname(String iLUTblName) {
-		mLUTableName = iLUTblName;
+	@Override
+	public boolean shouldSkipClass(Class<?> clazz) {
+		return typeToSkip == null ? clazz.getAnnotation(ignore.class) != null : typeToSkip == clazz;
 	}
-	
-	public String gettblname() {
-		return mLUTableName;
-	}
-	
+
 }

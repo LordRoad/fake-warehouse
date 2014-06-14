@@ -15,47 +15,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.test.config;
+package org.artemis.toolkit.test.table;
 
 import java.io.IOException;
+
 import org.artemis.toolkit.common.configparser;
-import org.artemis.toolkit.table.lookuptable;
-import org.junit.Ignore;
+import org.artemis.toolkit.table.analyticsops.order;
+import org.artemis.toolkit.table.datatype;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * configtest TODO
- * configtest.java is written at Jun 13, 2014
- * @author junli
+ * enumtest test customized Gson adapter
+ * enumtest.java is written at Jun 15, 2014
+ * @author return_jun
  */
 @RunWith(JUnit4.class)
-public class configtest {
+public class enumtest {
 	
 	@Test
-	//@Ignore
-	public void writetest() throws IOException {
+	public void dttest() throws IOException {
+		datatype ldatatype = datatype.DATETIME;
+		
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
-				"/lookuptblconfig.json");
+				"/tmp/testdatatype.json");
 		
-		lookuptable llookuptable = new lookuptable("LU_table", null);
-		llookuptable.settblname("LU_table");
-		
-		lconfigparser.serialize(llookuptable);
+		lconfigparser.serialize(ldatatype);
 	}
 	
 	@Test
-	//@Ignore
-	public void readtest() throws IOException {
+	public void dtdestest() throws IOException {
+		
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
-				"/lookuptblconfig.json");
+				"/tmp/testdatatype.json");
 		
-		lookuptable llookuptable = lconfigparser.deserialize(lookuptable.class);
-		if (llookuptable != null) {
-			System.out.println(llookuptable.gettblname());
-		}
+		datatype ldatatype = lconfigparser.deserialize(datatype.class);
+		System.out.println("data type: " + ldatatype.value());
+	}
+	
+	@Test
+	public void ordertest() throws IOException {
+		order lorder = order.Ascend;
 		
+		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
+				"/tmp/testorder.json");
+		
+		lconfigparser.serialize(lorder);
 	}
 	
 }

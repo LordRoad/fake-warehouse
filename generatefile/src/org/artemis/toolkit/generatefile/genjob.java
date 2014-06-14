@@ -37,8 +37,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 
+ * genjob TODO
+ * genjob.java is written at Jun 15, 2014
  * @author return_jun
- *
  */
 public class genjob implements Runnable {
 	private static final Logger LOG = LoggerFactory.getLogger(genjob.class);
