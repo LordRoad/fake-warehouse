@@ -18,44 +18,10 @@
 package org.artemis.toolkit.table;
 
 /**
- * analyticsops TODO
- * analyticsops.java is written at Jun 14, 2014
+ * basicrow row
+ * basicrow.java is written at Jun 15, 2014
  * @author return_jun
  */
-public class analyticsops {
-
-	public static enum order {
-		Descend("desc"),
-		Ascend("asc"),
-		Random("rand");
-		
-		private String mOrderName;
-		
-		private order(String iordername) {
-			mOrderName = iordername;
-		}
-		
-		public String value() {
-			return mOrderName;
-		}
-		
-		public String toString() {
-			return mOrderName;
-		}
-		
-		public static order fromString(String iordername) {
-			if (iordername.compareTo("desc") == 0) {
-				return Descend;
-			}
-			if (iordername.compareTo("asc") == 0) {
-				return Ascend;
-			}
-			if (iordername.compareTo("rand") == 0) {
-				return Random;
-			}
-			return null;
-		}
-		
-	}
-	
+public class basicrow {
+	private 
 }

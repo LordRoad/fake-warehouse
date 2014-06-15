@@ -1,0 +1,40 @@
+{
+  "facttbl_name": "fact_table",
+  "facttbl_cols": [
+    {
+      "colname": "index",
+      "coltype": "long",
+      "colorder": "asc",
+      "colstep": 1,
+      "colrange": "0-"
+    },
+    {
+      "colname": "gender",
+      "coltype": "short",
+      "colorder": "rand",
+      "colstep": 1,
+      "colrange": "0-1"
+    },
+    {
+      "colname": "date",
+      "coltype": "date",
+      "colorder": "rand",
+      "colstep": 1,
+      "colrange": "2012-06-28~2014-06-15"
+    },
+    {
+      "colname": "description",
+      "coltype": "string",
+      "colorder": "rand",
+      "colstep": 1,
+      "colrange": "0-255"
+    },
+    {
+      "colname": "metric",
+      "coltype": "long",
+      "colorder": "rand",
+      "colstep": 1,
+      "colrange": null
+    }
+  ]
+}

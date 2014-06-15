@@ -1,0 +1,52 @@
+{
+  "LU_table": [
+    {
+      "lookuptbl_name": "LU_date",
+      "lookuptbl_cols_index": [
+        2
+      ]
+    },
+    {
+      "lookuptbl_name": "LU_index",
+      "lookuptbl_cols_index": [
+        0,
+        1
+      ]
+    }
+  ],
+  "fact_table": {
+    "facttbl_name": "fact_table",
+    "facttbl_cols": [
+      {
+        "colname": "index",
+        "coltype": "long",
+        "colorder": "asc",
+        "colrange": "0-"
+      },
+      {
+        "colname": "gender",
+        "coltype": "short",
+        "colorder": "rand",
+        "colrange": "0-1"
+      },
+      {
+        "colname": "date",
+        "coltype": "date",
+        "colorder": "rand",
+        "colrange": "2012-06-28~2014-06-15"
+      },
+      {
+        "colname": "description",
+        "coltype": "string",
+        "colorder": "rand",
+        "colrange": "0-255"
+      },
+      {
+        "colname": "metric",
+        "coltype": "long",
+        "colorder": "rand",
+        "colrange": null
+      }
+    ]
+  }
+}

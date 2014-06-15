@@ -38,6 +38,16 @@ public class column {
 	 * otherwise, data will be generated based on range
 	 */
 	@SerializedName("colorder") private analyticsops.order mColOrder = analyticsops.order.Random;
+	
+	/**
+	 * when user specifies column oder, it should be added one by one or 
+	 * odd, even or specified steps (such as 6, -6)
+	 */
+	@SerializedName("colstep") private int mColStep = 1;
+
+	/**
+	 * column range: [1-10000), [2012-06-28~2014-06-15)
+	 */
 	@SerializedName("colrange") private String mColRange = null;
 	
 	public column() {
@@ -50,12 +60,18 @@ public class column {
 	
 	public column(String icolname, datatype idatatype, analyticsops.order iorder, 
 			String irange) {
+		this(icolname, idatatype, iorder, irange, 1);
+	}
+
+	public column(String icolname, datatype idatatype, analyticsops.order iorder, 
+			String irange, int istep) {
 		mColName = icolname;
 		mColType = idatatype;
 		mColOrder = iorder;
 		mColRange = irange;
+		mColStep = istep;
 	}
-
+	
 	public String getmColName() {
 		return mColName;
 	}
@@ -86,6 +102,14 @@ public class column {
 
 	public void setmColRange(String mColRange) {
 		this.mColRange = mColRange;
+	}
+	
+	public int getmColStep() {
+		return mColStep;
+	}
+
+	public void setmColStep(int mColStep) {
+		this.mColStep = mColStep;
 	}
 	
 }

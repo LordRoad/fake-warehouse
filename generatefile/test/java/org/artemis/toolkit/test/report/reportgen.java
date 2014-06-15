@@ -18,30 +18,34 @@
 package org.artemis.toolkit.test.report;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.artemis.toolkit.common.configparser;
-import org.artemis.toolkit.table.analyticsops.order;
 import org.artemis.toolkit.table.column;
 import org.artemis.toolkit.table.datatype;
 import org.artemis.toolkit.table.facttable;
 import org.artemis.toolkit.table.lookuptable;
 import org.artemis.toolkit.table.report;
 import org.artemis.toolkit.table.reportbuilder;
+import org.artemis.toolkit.table.analyticsops.order;
+import org.artemis.toolkit.table.generatereport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * serialize TODO
- * serialize.java is written at Jun 15, 2014
+ * reportgen TODO
+ * reportgen.java is written at Jun 15, 2014
  * @author return_jun
  */
 @RunWith(JUnit4.class)
-public class reportdef {
+public class reportgen {
 
+	private String mReportGenConfigure = System.getProperty("user.dir") +
+			"/tmp/testReportGen.json";
+	
 	@Test
-	public void testreportdef() throws IOException {
+	public void testReportGen() throws IOException {
+		
 		facttable lfacttable = new facttable("fact_table");
 		
 		lfacttable.insertnewcolumn(new column("index", datatype.LONG, order.Ascend, "0-"));
@@ -60,29 +64,28 @@ public class reportdef {
 				.addLUTable(llookuptable)
 				.addLUTable(llookuptable2)
 				.build();
+	
+		generatereport lreportgenerate = new generatereport();
+		lreportgenerate.setmReport(lreport);
+		lreportgenerate.setmFacttblRowcount(10000000);
+		lreportgenerate.setmFacttblSlice(32);
+		lreportgenerate.setmReportName("testReportGen");
+		lreportgenerate.setmStoragePath(System.getProperty("user.dir") +
+				"/tmp");
 		
-		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
-				"/tmp/testReport.json");
+		configparser lconfigparser = new configparser(mReportGenConfigure);
 		
-		lconfigparser.serialize(lreport);
+		lconfigparser.serialize(lreportgenerate);
 	}
 	
 	@Test
-	public void testreportdefinit() throws IOException {
+	public void testReportGeninit() throws IOException {
+		generatereport lreportgenerate = generatereport.createReportGenerate(mReportGenConfigure);
 		
-		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
-				"/tmp/testReport.json");
-		
-		report lreport = lconfigparser.deserialize(report.class);
-		
-		System.out.println("fact table name: " + lreport.getmfacttable().getmFactTableName());
-		
-		List<lookuptable> lLUtableset = lreport.getmlookuptableset();
-		for (lookuptable lLUtable : lLUtableset) {
-			System.out.println("lookup table name: " + lLUtable.gettblname());
-		}
+		System.out.println("report name: " + lreportgenerate.getmReportName());
+		System.out.println("storage path: " + lreportgenerate.getmStoragePath());
+		System.out.println("row count: " + Long.toString(lreportgenerate.getmFacttblRowcount()));
+		System.out.println("slices: " + Long.toString(lreportgenerate.getmFacttblSlice()));
 		
 	}
-	
-	
 }
