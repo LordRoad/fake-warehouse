@@ -35,23 +35,22 @@ import com.google.gson.annotations.SerializedName;
 public class reportbuilder {
 	private static final Logger LOG = LoggerFactory.getLogger(reportbuilder.class);
 	
-	private facttable mfacttable = null;
-	private List<lookuptable> mlookuptableset = new ArrayList<lookuptable>();
-	private Map<Integer, ArrayList<Integer>> mRelationMap = new HashMap<Integer, ArrayList<Integer>>();
+	private tablemd mfacttable = null;
+	private List<tablemd> mlookuptableset = new ArrayList<tablemd>();
+	// private Map<Integer, ArrayList<Integer>> mRelationMap = new HashMap<Integer, ArrayList<Integer>>();
 	
 	public reportbuilder() {
 		
 	}
 	
-	public reportbuilder addFactTable(facttable ifacttable) {
+	public reportbuilder addFactTable(tablemd ifacttable) {
 		mfacttable = ifacttable;
 		return this;
 	}
 	
-	public reportbuilder addLUTable(lookuptable ilookuptable) {
+	public reportbuilder addLUTable(tablemd ilookuptable) {
 		synchronized (mlookuptableset) {
 			mlookuptableset.add(ilookuptable);
-			mRelationMap.put(mlookuptableset.size() - 1, (ArrayList<Integer>) ilookuptable.getmLUColsIndex());
 		}
 		return this;
 	}

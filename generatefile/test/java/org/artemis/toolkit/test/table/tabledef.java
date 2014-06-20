@@ -21,10 +21,10 @@ import java.io.IOException;
 
 import org.artemis.toolkit.common.configparser;
 import org.artemis.toolkit.table.analyticsops;
-import org.artemis.toolkit.table.column;
+import org.artemis.toolkit.table.columnmd;
 import org.artemis.toolkit.table.datatype;
-import org.artemis.toolkit.table.facttable;
-import org.artemis.toolkit.table.lookuptable;
+import org.artemis.toolkit.table.tabledata;
+import org.artemis.toolkit.table.tablemd;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -39,13 +39,13 @@ public class tabledef {
 
 	@Test
 	public void testfacttbl() throws IOException {
-		facttable lfacttable = new facttable("fact_table");
+		tabledata lfacttable = new tabledata("fact_table");
 		
-		lfacttable.insertnewcolumn(new column("index", datatype.LONG, analyticsops.order.Ascend, "0-"));
-		lfacttable.insertnewcolumn(new column("gender", datatype.SHORT, analyticsops.order.Random, "0-1"));
-		lfacttable.insertnewcolumn(new column("date", datatype.DATE, analyticsops.order.Random, "2012-06-28~2014-06-15"));
-		lfacttable.insertnewcolumn(new column("description", datatype.STRING, analyticsops.order.Random, "0-255"));
-		lfacttable.insertnewcolumn(new column("metric", datatype.LONG));
+		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, analyticsops.order.Ascend, "0-"));
+		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, analyticsops.order.Random, "0-1"));
+		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, analyticsops.order.Random, "2012-06-28~2014-06-15"));
+		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, analyticsops.order.Random, "0-255"));
+		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
 		
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/tmp/testfacttbl.json");
@@ -59,21 +59,21 @@ public class tabledef {
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/tmp/testfacttbl.json");
 		
-		facttable lfacttable = lconfigparser.deserialize(facttable.class);
+		tabledata lfacttable = lconfigparser.deserialize(tabledata.class);
 		System.out.println(lfacttable.getmFactTableName());
 	}
 	
 	@Test
 	public void testLUtbl() throws IOException {
-		facttable lfacttable = new facttable("fact_table");
+		tabledata lfacttable = new tabledata("fact_table");
 		
-		lfacttable.insertnewcolumn(new column("index", datatype.LONG, analyticsops.order.Ascend, "0-"));
-		lfacttable.insertnewcolumn(new column("gender", datatype.SHORT, analyticsops.order.Random, "0-1"));
-		lfacttable.insertnewcolumn(new column("date", datatype.DATE, analyticsops.order.Random, "2012-06-28~2014-06-15"));
-		lfacttable.insertnewcolumn(new column("description", datatype.STRING, analyticsops.order.Random, "0-255"));
-		lfacttable.insertnewcolumn(new column("metric", datatype.LONG));
+		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, analyticsops.order.Ascend, "0-"));
+		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, analyticsops.order.Random, "0-1"));
+		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, analyticsops.order.Random, "2012-06-28~2014-06-15"));
+		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, analyticsops.order.Random, "0-255"));
+		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
 		
-		lookuptable llookuptable = new lookuptable("LU_date", lfacttable);
+		tablemd llookuptable = new tablemd("LU_date", lfacttable);
 		
 		llookuptable.adddependency(new int[] {2});
 		

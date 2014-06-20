@@ -19,7 +19,7 @@ package org.artemis.toolkit.test.config;
 
 import java.io.IOException;
 import org.artemis.toolkit.common.configparser;
-import org.artemis.toolkit.table.lookuptable;
+import org.artemis.toolkit.table.tablemd;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +39,7 @@ public class configtest {
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/lookuptblconfig.json");
 		
-		lookuptable llookuptable = new lookuptable("LU_table", null);
+		tablemd llookuptable = new tablemd("LU_table", null);
 		llookuptable.settblname("LU_table");
 		
 		lconfigparser.serialize(llookuptable);
@@ -51,7 +51,7 @@ public class configtest {
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/lookuptblconfig.json");
 		
-		lookuptable llookuptable = lconfigparser.deserialize(lookuptable.class);
+		tablemd llookuptable = lconfigparser.deserialize(tablemd.class);
 		if (llookuptable != null) {
 			System.out.println(llookuptable.gettblname());
 		}

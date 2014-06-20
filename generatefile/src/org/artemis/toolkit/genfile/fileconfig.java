@@ -15,13 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.table;
+package org.artemis.toolkit.genfile;
 
 /**
- * basicrow row
- * basicrow.java is written at Jun 15, 2014
- * @author return_jun
+ * fileconfig TODO
+ * fileconfig.java is written at Jun 13, 2014
+ * @author junli
  */
-public class basicrow {
-	private 
+public class fileconfig {
+	
 }

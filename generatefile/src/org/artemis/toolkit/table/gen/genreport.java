@@ -15,11 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.table;
+package org.artemis.toolkit.table.gen;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.artemis.toolkit.common.configparser;
+import org.artemis.toolkit.table.report;
+import org.artemis.toolkit.table.tablemd;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -28,24 +31,21 @@ import com.google.gson.annotations.SerializedName;
  * reportgenerate.java is written at Jun 15, 2014
  * @author return_jun
  */
-public class generatereport {
+public class genreport {
 	/**
 	 * the folder is used to store generated report
 	 */
 	@SerializedName("storage_path") private String mStoragePath = null;
-	@SerializedName("facttbl_rowcount") private long mFacttblRowcount = 0;
-	@SerializedName("facttbl_slice") private long mFacttblSlice = 1;
 	@SerializedName("report_name") private String mReportName = null;
-	
 	@SerializedName("report") private report mReport = null;
 
-	public generatereport() {
+	public genreport() {
 		
 	}
 	
-	public static generatereport createReportGenerate(String iconfigurefile) throws IOException {
+	public static genreport createReportGenerate(String iconfigurefile) throws IOException {
 		configparser lconfigparser = new configparser(iconfigurefile);
-		return lconfigparser.deserialize(generatereport.class);
+		return lconfigparser.deserialize(genreport.class);
 	}
 	
 	public String getmStoragePath() {
@@ -54,22 +54,6 @@ public class generatereport {
 
 	public void setmStoragePath(String mStoragePath) {
 		this.mStoragePath = mStoragePath;
-	}
-
-	public long getmFacttblRowcount() {
-		return mFacttblRowcount;
-	}
-
-	public void setmFacttblRowcount(long mFacttblRowcount) {
-		this.mFacttblRowcount = mFacttblRowcount;
-	}
-
-	public long getmFacttblSlice() {
-		return mFacttblSlice;
-	}
-
-	public void setmFacttblSlice(long mFacttblSlice) {
-		this.mFacttblSlice = mFacttblSlice;
 	}
 
 	public String getmReportName() {
@@ -92,6 +76,14 @@ public class generatereport {
 	 * generate report based on schema information
 	 */
 	public void generateReport() {
+		if (mReport == null) {
+			throw new RuntimeException("fatal error, there is no report instance in current generating environment.");
+		}
+		
+		List<tablemd> lLUTables = mReport.getmlookuptableset();
+		for (tablemd lLUTable : lLUTables) {
+			
+		}
 		
 	}
 }

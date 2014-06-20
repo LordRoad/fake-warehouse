@@ -18,12 +18,14 @@
 package org.artemis.toolkit.table;
 
 /**
- * generatefacttbl TODO
- * generatefacttbl.java is written at Jun 15, 2014
+ * basicrow row
+ * basicrow.java is written at Jun 15, 2014
  * @author return_jun
  */
-public class generatefacttbl {
+public class row {
+	private String[] mRowData;
 	
-	
-	
+	public row() {
+		
+	}
 }

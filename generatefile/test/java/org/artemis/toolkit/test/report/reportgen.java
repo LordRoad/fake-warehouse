@@ -20,14 +20,14 @@ package org.artemis.toolkit.test.report;
 import java.io.IOException;
 
 import org.artemis.toolkit.common.configparser;
-import org.artemis.toolkit.table.column;
+import org.artemis.toolkit.table.columnmd;
 import org.artemis.toolkit.table.datatype;
-import org.artemis.toolkit.table.facttable;
-import org.artemis.toolkit.table.lookuptable;
+import org.artemis.toolkit.table.tabledata;
+import org.artemis.toolkit.table.tablemd;
 import org.artemis.toolkit.table.report;
 import org.artemis.toolkit.table.reportbuilder;
 import org.artemis.toolkit.table.analyticsops.order;
-import org.artemis.toolkit.table.generatereport;
+import org.artemis.toolkit.table.gen.genreport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -46,18 +46,22 @@ public class reportgen {
 	@Test
 	public void testReportGen() throws IOException {
 		
-		facttable lfacttable = new facttable("fact_table");
+		tabledata lfacttable = new tabledata("fact_table");
 		
-		lfacttable.insertnewcolumn(new column("index", datatype.LONG, order.Ascend, "0-"));
-		lfacttable.insertnewcolumn(new column("gender", datatype.SHORT, order.Random, "0-1"));
-		lfacttable.insertnewcolumn(new column("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
-		lfacttable.insertnewcolumn(new column("description", datatype.STRING, order.Random, "0-255"));
-		lfacttable.insertnewcolumn(new column("metric", datatype.LONG));
+		lfacttable.setmFacttblRowcount(1000000);
+		lfacttable.setmFacttblSlice(32);
+		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, order.Ascend, "0-"));
+		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, order.Random, "0-1"));
+		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
+		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, order.Random, "0-255"));
+		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
 		
-		lookuptable llookuptable = new lookuptable("LU_date", lfacttable);
+		tablemd llookuptable = new tablemd("LU_date", lfacttable);
+		llookuptable.setmLUTableRowcount(1000);
 		llookuptable.adddependency(new int[] {2});
 		
-		lookuptable llookuptable2 = new lookuptable("LU_index", lfacttable);
+		tablemd llookuptable2 = new tablemd("LU_index", lfacttable);
+		llookuptable2.setmLUTableRowcount(512);
 		llookuptable2.adddependency(new int[] {0,1});
 		
 		report lreport = new reportbuilder().addFactTable(lfacttable)
@@ -65,10 +69,8 @@ public class reportgen {
 				.addLUTable(llookuptable2)
 				.build();
 	
-		generatereport lreportgenerate = new generatereport();
+		genreport lreportgenerate = new genreport();
 		lreportgenerate.setmReport(lreport);
-		lreportgenerate.setmFacttblRowcount(10000000);
-		lreportgenerate.setmFacttblSlice(32);
 		lreportgenerate.setmReportName("testReportGen");
 		lreportgenerate.setmStoragePath(System.getProperty("user.dir") +
 				"/tmp");
@@ -80,12 +82,10 @@ public class reportgen {
 	
 	@Test
 	public void testReportGeninit() throws IOException {
-		generatereport lreportgenerate = generatereport.createReportGenerate(mReportGenConfigure);
+		genreport lreportgenerate = genreport.createReportGenerate(mReportGenConfigure);
 		
 		System.out.println("report name: " + lreportgenerate.getmReportName());
 		System.out.println("storage path: " + lreportgenerate.getmStoragePath());
-		System.out.println("row count: " + Long.toString(lreportgenerate.getmFacttblRowcount()));
-		System.out.println("slices: " + Long.toString(lreportgenerate.getmFacttblSlice()));
 		
 	}
 }

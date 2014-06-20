@@ -26,47 +26,34 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * facttable TODO
- * facttable.java is written at Jun 14, 2014
+ * tabledata TODO
+ * tabledata.java is written at Jun 14, 2014
  * @author return_jun
  */
-public class facttable {
-	private static final Logger LOG = LoggerFactory.getLogger(facttable.class);
+public class tabledata {
+	private static final Logger LOG = LoggerFactory.getLogger(tabledata.class);
 
-	@SerializedName("facttbl_name") private String mFactTableName = null;
-	@SerializedName("facttbl_cols") private List<column> mColumns = new ArrayList<column>();
+	private String[][] mColumnsData;
 	
-	public facttable(String itblname) {
-		mFactTableName = itblname;
-	}
-	
-	public void insertnewcolumn(column icolumndef) {
-		synchronized (mColumns) {
-			mColumns.add(icolumndef);
-		}
-	}
-	
-	public String getmFactTableName() {
-		return mFactTableName;
+	public tabledata(int iColumnCount) {
+		mColumnsData = new String[iColumnCount][];
 	}
 
-	public void setmFactTableName(String mFactTableName) {
-		this.mFactTableName = mFactTableName;
-	}
-
-	public boolean iscolexisted(String icolumnname) {
-		for (column icolumn : mColumns) {
-			if (icolumn.getmColName().compareTo(icolumnname) == 0) {
-				return true;
-			}
-		}
-		return false;
+	public void flushDataIntoDisk(String iStoragePath) {
+		
 	}
 	
-	public int getcolcount() {
-		synchronized (mColumns) {
-			return mColumns.size();
+	public void putColumnData(int iColumnIndex, String [] iColumnData) {
+		if (iColumnData == null) {
+			throw new RuntimeException();
+			LOG.error("column data is null for lookup tabledata: " + mlookuptable.getmTableName());
+			return;
 		}
+		if (iColumnIndex < 0 || iColumnIndex >= mlookuptable.getColumnCount()) {
+			LOG.error("column data is null for lookup tabledata: " + mlookuptable.getmTableName());
+			return;
+		}
+		mColumnsData[iColumnIndex] = iColumnData;
 	}
 	
 }

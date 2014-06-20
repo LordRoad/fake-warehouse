@@ -15,13 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.generatefile;
+package org.artemis.toolkit.table.gen;
 
 /**
- * fileconfig TODO
- * fileconfig.java is written at Jun 13, 2014
+ * gentable TODO
+ * gentable.java is written at Jun 19, 2014
  * @author junli
  */
-public class fileconfig {
+public class gentable {
+	
+	
+	
+	
+	public void genTableData() {
+		
+	}
 	
 }

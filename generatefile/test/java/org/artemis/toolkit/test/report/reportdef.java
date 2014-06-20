@@ -22,10 +22,10 @@ import java.util.List;
 
 import org.artemis.toolkit.common.configparser;
 import org.artemis.toolkit.table.analyticsops.order;
-import org.artemis.toolkit.table.column;
+import org.artemis.toolkit.table.columnmd;
 import org.artemis.toolkit.table.datatype;
-import org.artemis.toolkit.table.facttable;
-import org.artemis.toolkit.table.lookuptable;
+import org.artemis.toolkit.table.tabledata;
+import org.artemis.toolkit.table.tablemd;
 import org.artemis.toolkit.table.report;
 import org.artemis.toolkit.table.reportbuilder;
 import org.junit.Test;
@@ -42,18 +42,18 @@ public class reportdef {
 
 	@Test
 	public void testreportdef() throws IOException {
-		facttable lfacttable = new facttable("fact_table");
+		tabledata lfacttable = new tabledata("fact_table");
 		
-		lfacttable.insertnewcolumn(new column("index", datatype.LONG, order.Ascend, "0-"));
-		lfacttable.insertnewcolumn(new column("gender", datatype.SHORT, order.Random, "0-1"));
-		lfacttable.insertnewcolumn(new column("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
-		lfacttable.insertnewcolumn(new column("description", datatype.STRING, order.Random, "0-255"));
-		lfacttable.insertnewcolumn(new column("metric", datatype.LONG));
+		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, order.Ascend, "0-"));
+		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, order.Random, "0-1"));
+		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
+		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, order.Random, "0-255"));
+		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
 		
-		lookuptable llookuptable = new lookuptable("LU_date", lfacttable);
+		tablemd llookuptable = new tablemd("LU_date", lfacttable);
 		llookuptable.adddependency(new int[] {2});
 		
-		lookuptable llookuptable2 = new lookuptable("LU_index", lfacttable);
+		tablemd llookuptable2 = new tablemd("LU_index", lfacttable);
 		llookuptable2.adddependency(new int[] {0,1});
 		
 		report lreport = new reportbuilder().addFactTable(lfacttable)
@@ -75,11 +75,11 @@ public class reportdef {
 		
 		report lreport = lconfigparser.deserialize(report.class);
 		
-		System.out.println("fact table name: " + lreport.getmfacttable().getmFactTableName());
+		System.out.println("fact tabledata name: " + lreport.getmfacttable().getmFactTableName());
 		
-		List<lookuptable> lLUtableset = lreport.getmlookuptableset();
-		for (lookuptable lLUtable : lLUtableset) {
-			System.out.println("lookup table name: " + lLUtable.gettblname());
+		List<tablemd> lLUtableset = lreport.getmlookuptableset();
+		for (tablemd lLUtable : lLUtableset) {
+			System.out.println("lookup tabledata name: " + lLUtable.gettblname());
 		}
 		
 	}

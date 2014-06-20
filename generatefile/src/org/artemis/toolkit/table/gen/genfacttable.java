@@ -15,24 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.table;
+package org.artemis.toolkit.table.gen;
 
 /**
- * generatelutable TODO
- * generatelutable.java is written at Jun 15, 2014
+ * genfacttable TODO
+ * genfacttable.java is written at Jun 15, 2014
  * @author return_jun
  */
-public class generatelutable {
-
-	private final lookuptable mlookuptable;
-	private Set<> 
+public class genfacttable {
 	
-	public generatelutable(lookuptable ilookuptable) {
-		mlookuptable = ilookuptable;
-	}
 	
-	public void addrow() {
-		
-	}
 	
 }

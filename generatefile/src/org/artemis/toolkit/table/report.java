@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.artemis.toolkit.common.ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,32 +36,50 @@ import com.google.gson.annotations.SerializedName;
 public class report {
 	private static final Logger LOG = LoggerFactory.getLogger(report.class);
 	
-	@SerializedName("LU_table") private List<lookuptable> mlookuptableset = new ArrayList<lookuptable>();
-	@SerializedName("fact_table") private facttable mfacttable = null;
+	@SerializedName("LU_table") private List<tablemd> mlookuptableset = new ArrayList<tablemd>();
+	@SerializedName("fact_table") private tablemd mfacttable = null;
+	@SerializedName("LU_fact_relation") private List<Integer> mLUColsIndex = new ArrayList<Integer>();
+	
 	//@SerializedName("relationship") private Map<Integer, ArrayList<Integer>> mRelationMap = new HashMap<Integer, ArrayList<Integer>>();
 	
-	public report(facttable ifacttable, List<lookuptable> ilookuptableset) {
+	public report(tablemd ifacttable, List<tablemd> ilookuptableset) {
 		mfacttable = ifacttable;
 		mlookuptableset = ilookuptableset;
 	}
 	
-	public facttable getmfacttable() {
+	public tablemd getmfacttable() {
 		return mfacttable;
 	}
 	
-	public void setmfacttable(facttable mfacttable) {
+	public void setmfacttable(tablemd mfacttable) {
 		this.mfacttable = mfacttable;
 	}
 	
-	public List<lookuptable> getmlookuptableset() {
+	public List<tablemd> getmlookuptableset() {
 		return mlookuptableset;
 	}
 	
-	public void setmlookuptableset(List<lookuptable> mlookuptableset) {
+	public void setmlookuptableset(List<tablemd> mlookuptableset) {
 		this.mlookuptableset = mlookuptableset;
 	}
 	
-	
+	/**
+	 * columnmd mapping from fact tabledata
+	 * @param idependency
+	 */
+	public void adddependency(int[] idependency) {
+		if (idependency != null) {
+			int lColsCountInFactTable = mfacttable.getcolcount();
+			for (int iter = 0; iter < idependency.length; ++iter) {
+				if (idependency[iter] >= lColsCountInFactTable ) {
+					LOG.error("columnmd mapping is invalid. columnmd " + Integer.toString(idependency[iter]) 
+							+ " is out of range " + Integer.toString(lColsCountInFactTable));
+					throw new RuntimeException("columnmd mapping is invalid");
+				}
+				mLUColsIndex.add(idependency[iter]);
+			}
+		}
+	}
 	
 	
 }

@@ -27,8 +27,8 @@ import com.google.gson.annotations.SerializedName;
  * columndef.java is written at Jun 14, 2014
  * @author return_jun
  */
-public class column {
-	private static final Logger LOG = LoggerFactory.getLogger(column.class);
+public class columnmd {
+	private static final Logger LOG = LoggerFactory.getLogger(columnmd.class);
 	
 	@SerializedName("colname") private String mColName = null;
 	@SerializedName("coltype") private datatype mColType = datatype.INVALID;
@@ -40,30 +40,30 @@ public class column {
 	@SerializedName("colorder") private analyticsops.order mColOrder = analyticsops.order.Random;
 	
 	/**
-	 * when user specifies column oder, it should be added one by one or 
+	 * when user specifies columnmd oder, it should be added one by one or 
 	 * odd, even or specified steps (such as 6, -6)
 	 */
 	@SerializedName("colstep") private int mColStep = 1;
 
 	/**
-	 * column range: [1-10000), [2012-06-28~2014-06-15)
+	 * columnmd range: [1-10000), [2012-06-28~2014-06-15)
 	 */
 	@SerializedName("colrange") private String mColRange = null;
 	
-	public column() {
+	public columnmd() {
 		
 	}
 	
-	public column(String icolname, datatype idatatype) {
+	public columnmd(String icolname, datatype idatatype) {
 		this(icolname, idatatype, analyticsops.order.Random, null);
 	}
 	
-	public column(String icolname, datatype idatatype, analyticsops.order iorder, 
+	public columnmd(String icolname, datatype idatatype, analyticsops.order iorder, 
 			String irange) {
 		this(icolname, idatatype, iorder, irange, 1);
 	}
 
-	public column(String icolname, datatype idatatype, analyticsops.order iorder, 
+	public columnmd(String icolname, datatype idatatype, analyticsops.order iorder, 
 			String irange, int istep) {
 		mColName = icolname;
 		mColType = idatatype;

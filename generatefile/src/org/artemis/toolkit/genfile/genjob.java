@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.generatefile;
+package org.artemis.toolkit.genfile;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -175,7 +175,7 @@ public class genjob implements Runnable {
 			default:
 				if (!mInvalidColumnChecked) {
 					mInvalidColumnChecked = true;
-					LOG.warn("current column type " + mColumnType[iter] + " is not supported.");
+					LOG.warn("current columnmd type " + mColumnType[iter] + " is not supported.");
 				}
 				break;
 			}
