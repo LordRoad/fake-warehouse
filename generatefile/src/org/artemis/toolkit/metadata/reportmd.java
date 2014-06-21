@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.table;
+package org.artemis.toolkit.metadata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,8 +33,8 @@ import com.google.gson.annotations.SerializedName;
  * report.java is written at Jun 14, 2014
  * @author return_jun
  */
-public class report {
-	private static final Logger LOG = LoggerFactory.getLogger(report.class);
+public class reportmd {
+	private static final Logger LOG = LoggerFactory.getLogger(reportmd.class);
 	
 	@SerializedName("LU_table") private List<tablemd> mlookuptableset = new ArrayList<tablemd>();
 	@SerializedName("fact_table") private tablemd mfacttable = null;
@@ -42,7 +42,7 @@ public class report {
 	
 	//@SerializedName("relationship") private Map<Integer, ArrayList<Integer>> mRelationMap = new HashMap<Integer, ArrayList<Integer>>();
 	
-	public report(tablemd ifacttable, List<tablemd> ilookuptableset) {
+	public reportmd(tablemd ifacttable, List<tablemd> ilookuptableset) {
 		mfacttable = ifacttable;
 		mlookuptableset = ilookuptableset;
 	}

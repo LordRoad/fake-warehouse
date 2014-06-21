@@ -21,13 +21,13 @@ import java.io.IOException;
 import java.util.List;
 
 import org.artemis.toolkit.common.configparser;
+import org.artemis.toolkit.metadata.columnmd;
+import org.artemis.toolkit.metadata.reportbuilder;
+import org.artemis.toolkit.metadata.reportmd;
+import org.artemis.toolkit.metadata.tablemd;
 import org.artemis.toolkit.table.analyticsops.order;
-import org.artemis.toolkit.table.columnmd;
 import org.artemis.toolkit.table.datatype;
 import org.artemis.toolkit.table.tabledata;
-import org.artemis.toolkit.table.tablemd;
-import org.artemis.toolkit.table.report;
-import org.artemis.toolkit.table.reportbuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -56,7 +56,7 @@ public class reportdef {
 		tablemd llookuptable2 = new tablemd("LU_index", lfacttable);
 		llookuptable2.adddependency(new int[] {0,1});
 		
-		report lreport = new reportbuilder().addFactTable(lfacttable)
+		reportmd lreport = new reportbuilder().addFactTable(lfacttable)
 				.addLUTable(llookuptable)
 				.addLUTable(llookuptable2)
 				.build();
@@ -73,7 +73,7 @@ public class reportdef {
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/tmp/testReport.json");
 		
-		report lreport = lconfigparser.deserialize(report.class);
+		reportmd lreport = lconfigparser.deserialize(reportmd.class);
 		
 		System.out.println("fact tabledata name: " + lreport.getmfacttable().getmFactTableName());
 		

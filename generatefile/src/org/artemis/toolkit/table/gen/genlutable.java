@@ -17,8 +17,12 @@
  */
 package org.artemis.toolkit.table.gen;
 
+import java.util.List;
+
+import org.artemis.toolkit.metadata.columnmd;
+import org.artemis.toolkit.metadata.tablemd;
+import org.artemis.toolkit.table.analyticsops.order;
 import org.artemis.toolkit.table.tabledata;
-import org.artemis.toolkit.table.tablemd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +37,7 @@ public class genlutable {
 	private final tablemd mlookuptable;
 	private boolean mDone = false;
 	private tabledata[] mtabledataset;
+	private tablemd[] mjobtablesmd;
 	
 	public genlutable(tablemd ilookuptable) {
 		mlookuptable = ilookuptable;
@@ -46,13 +51,44 @@ public class genlutable {
 		
 	}
 	
-	protected void genjobs() {
+	protected void initjobtablemd() {
 		int lTableSlice = (int) mlookuptable.getmTableSlice();
-		tablemd[] ljobtablesmd = new tablemd[lTableSlice > 0 ? lTableSlice : 1]; 
+		mjobtablesmd = new tablemd[lTableSlice > 0 ? lTableSlice : 1]; 
+		if (mjobtablesmd.length == 1) {
+			mjobtablesmd[0] = mlookuptable;
+			return;
+		}
 		
-		for () {
+		long lTotalRowCount = mlookuptable.getmTableRowcount();
+		long lOneBatchRC = lTotalRowCount / lTableSlice;
+		long lLastBatchRC = lTotalRowCount % lTableSlice;
+		
+		// set rows
+		for (int iter = 0; iter < lTableSlice - 1; ++iter) {
+			mjobtablesmd[iter].setmTableRowcount(lOneBatchRC);
+		}
+		mjobtablesmd[lTableSlice - 1].setmTableRowcount(lLastBatchRC);
+		
+		// set columns
+		List<columnmd> lColsMD = mlookuptable.getmColumns();
+		for (columnmd lcolumnmd : lColsMD) {
+			columnmd lNewColumnMD = new columnmd();
+			lNewColumnMD.setmColName(lcolumnmd.getmColName());
+			
+			for (int iter = 0; iter < lTableSlice; ++iter) {
+				
+				if (lcolumnmd.getmColOrder() == order.Random) {
+					
+				}
+			}
 			
 		}
+		
+	}
+	
+	protected void genjobs() {
+		
+		
 	}
 	
 }

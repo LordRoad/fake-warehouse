@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.table;
+package org.artemis.toolkit.metadata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,8 +55,8 @@ public class reportbuilder {
 		return this;
 	}
 	
-	public report build() {
-		return new report(mfacttable, mlookuptableset);
+	public reportmd build() {
+		return new reportmd(mfacttable, mlookuptableset);
 	}
 	
 }

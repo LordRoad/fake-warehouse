@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.table;
+package org.artemis.toolkit.metadata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * tablemd lookup tabledata
+ * tablemd table md
  * tablemd.java is written at Jun 13, 2014
  * @author junli
  */
@@ -69,6 +69,12 @@ public class tablemd {
 
 	public columnmd getColumn(int icolumnIndex) {
 		return mColumns.get(icolumnIndex);
+	}
+	
+	public void insertColumn(columnmd icolumnmd) {
+		synchronized (mColumns) {
+			mColumns.add(icolumnmd);
+		}
 	}
 	
 	public List<columnmd> getmColumns() {

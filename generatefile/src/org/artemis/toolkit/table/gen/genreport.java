@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.artemis.toolkit.common.configparser;
-import org.artemis.toolkit.table.report;
-import org.artemis.toolkit.table.tablemd;
+import org.artemis.toolkit.metadata.reportmd;
+import org.artemis.toolkit.metadata.tablemd;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -37,7 +37,7 @@ public class genreport {
 	 */
 	@SerializedName("storage_path") private String mStoragePath = null;
 	@SerializedName("report_name") private String mReportName = null;
-	@SerializedName("report") private report mReport = null;
+	@SerializedName("report") private reportmd mReport = null;
 
 	public genreport() {
 		
@@ -64,11 +64,11 @@ public class genreport {
 		this.mReportName = mReportName;
 	}
 
-	public report getmReport() {
+	public reportmd getmReport() {
 		return mReport;
 	}
 
-	public void setmReport(report mReport) {
+	public void setmReport(reportmd mReport) {
 		this.mReport = mReport;
 	}
 	

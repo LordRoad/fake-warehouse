@@ -22,9 +22,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.artemis.toolkit.common.fileutils;
-import org.artemis.toolkit.table.columnmd;
+import org.artemis.toolkit.common.sysconfig;
+import org.artemis.toolkit.metadata.columnmd;
+import org.artemis.toolkit.metadata.tablemd;
 import org.artemis.toolkit.table.tabledata;
-import org.artemis.toolkit.table.tablemd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,7 @@ public class genjob implements Runnable {
 	private tablemd mtablemd;
 	private boolean mNeedCache = false;
 	private gendata[] mgendata;
+	private boolean mNeedLookup = false;
 	
 	public genjob(tablemd itablemd, String iStoragepath, boolean iNeedCache) {
 		mtablemd = itablemd;
@@ -113,6 +115,9 @@ public class genjob implements Runnable {
 	
 	@Override
 	public void run() {
+		LOG.trace("job ( table name: " + this.mtablemd.getmTableName() + 
+				", storage path: " + this.mStoragePath + ") is beginning");
+		
 		if (mStoragePath.length() < 1 && !mNeedCache) {
 			LOG.error("no cache, no storage ? for table: " + mtablemd.getmTableName());
 			return;
@@ -140,27 +145,60 @@ public class genjob implements Runnable {
 				return;
 			} 
 			
-			long lFlushCount = ;
-			long lCurrentBuffered = 0;
-			String lCurrentBatch = "";
+			String lOneBatchSetting = System.getProperty(sysconfig.sGenOneBatchRowCount);
 			
-			for (long index = 0; index < lRowCount; ++index) {
-				
-				lPrintWriter.println(generaterow());
-				if (++lCurrentBuffered >= lFlushCount) {
-					lPrintWriter.flush();
-					lCurrentBuffered = 0;
+			long lOneBatch = 100000;
+			if (lOneBatchSetting != null) {
+				try {
+					lOneBatch =  Long.parseLong(lOneBatchSetting);
+					lOneBatch = lOneBatch < 1 ? 100000 : lOneBatch;
+				} catch (NumberFormatException e) {
+					LOG.warn(e.getLocalizedMessage());
 				}
+			}
+			
+			long lBatchCount = (long)(lRowCount / lOneBatch);
+			long lLastBatchRowCount =  lRowCount % lOneBatch;
+			
+			for (long index = 0; index < lBatchCount; ++index) {
+				lPrintWriter.println(genOneChunk(lOneBatch));
+				lPrintWriter.flush();
+			}
+			if (lLastBatchRowCount > 0) {
+				lPrintWriter.println(genOneChunk(lOneBatch));
 			}
 			
 			lPrintWriter.flush();
 			lPrintWriter.close();
 		}
 		
+		LOG.trace("job ( table name: " + this.mtablemd.getmTableName() + 
+				", storage path: " + this.mStoragePath + ") is done successfully.");
 	}
 
 	private String genOneChunk(long irowcount) {
+		int lColCount = mgendata.length;
+		String lChunkData = "";
+		if (!mNeedLookup) {
+			int iter = 0;
+			int jter = 0;
+			for ( iter = 0; iter < irowcount; ++iter) {
+				for (jter = 0; jter < lColCount - 1; ++jter) {
+					try {
+						lChunkData += mgendata[jter].generateOneItem() + ",";
+					} catch (NoMoreDataException e) {
+						lChunkData += ",";
+					}
+				}
+				try {
+					lChunkData += mgendata[(int) (lColCount - 1)].generateOneItem();
+				} catch (NoMoreDataException e) {
+				}
+				lChunkData += "\n";
+			}
+		}
 		
+		return lChunkData;
 	}
 	
 }

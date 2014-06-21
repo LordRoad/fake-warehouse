@@ -15,16 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.table;
+package org.artemis.toolkit.metadata;
 
+import org.artemis.toolkit.table.analyticsops;
+import org.artemis.toolkit.table.datatype;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * columndef TODO
- * columndef.java is written at Jun 14, 2014
+ * columnmd TODO
+ * columnmd.java is written at Jun 14, 2014
  * @author return_jun
  */
 public class columnmd {

@@ -20,11 +20,11 @@ package org.artemis.toolkit.test.table;
 import java.io.IOException;
 
 import org.artemis.toolkit.common.configparser;
+import org.artemis.toolkit.metadata.columnmd;
+import org.artemis.toolkit.metadata.tablemd;
 import org.artemis.toolkit.table.analyticsops;
-import org.artemis.toolkit.table.columnmd;
 import org.artemis.toolkit.table.datatype;
 import org.artemis.toolkit.table.tabledata;
-import org.artemis.toolkit.table.tablemd;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

@@ -19,7 +19,7 @@ package org.artemis.toolkit.test.config;
 
 import java.io.IOException;
 import org.artemis.toolkit.common.configparser;
-import org.artemis.toolkit.table.tablemd;
+import org.artemis.toolkit.metadata.tablemd;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

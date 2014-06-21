@@ -91,6 +91,11 @@ public abstract class gendata {
 		return mDataRange.getmOriginalDataRange();
 	}
 
+	/**
+	 * generate one item
+	 * @return string, item to string
+	 * @throws NoMoreDataException, if all data has been fetched from data pool
+	 */
 	public abstract String generateOneItem();
 	
 }
