@@ -41,7 +41,7 @@ public class testbasictable {
 		tablemd lfacttable = new tablemd("fact_table");
 		
 		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, order.Ascend, "0~10000000"));
-		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, order.Random, "0~1"));
+		lfacttable.insertnewcolumn(new columnmd("gender", datatype.BOOLEAN, order.Random, "0~1"));
 		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
 		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, order.Random, "10"));
 		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG, order.Random, "1~10000"));

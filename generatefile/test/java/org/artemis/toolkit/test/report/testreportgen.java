@@ -27,6 +27,7 @@ import org.artemis.toolkit.metadata.tablemd;
 import org.artemis.toolkit.table.datatype;
 import org.artemis.toolkit.table.analyticsops.order;
 import org.artemis.toolkit.table.gen.genreport;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -48,7 +49,7 @@ public class testreportgen {
 		tablemd lfacttable = new tablemd("fact_table");
 		
 		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, order.Ascend, "0~"));
-		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, order.Random, "0~1"));
+		lfacttable.insertnewcolumn(new columnmd("gender", datatype.BOOLEAN, order.Random, "0~1"));
 		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
 		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, order.Random, "0~255"));
 		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
@@ -62,6 +63,7 @@ public class testreportgen {
 		tablemd llookuptable2 = new tablemd("LU_index");
 		llookuptable2.insertnewcolumn(new columnmd("index", datatype.INT, order.Ascend, "1~100000"));
 		llookuptable2.setmTableRowcount(10000);
+		llookuptable2.setmTableSlice(32);
 		
 		reportmd lreport = new reportbuilder().addFactTable(lfacttable)
 				.addLUTable(llookuptable)
@@ -80,6 +82,7 @@ public class testreportgen {
 	}
 	
 	@Test
+	@Ignore
 	public void testReportGeninit() throws IOException {
 		genreport lreportgenerate = genreport.createReportGenerate(mReportGenConfigure);
 		

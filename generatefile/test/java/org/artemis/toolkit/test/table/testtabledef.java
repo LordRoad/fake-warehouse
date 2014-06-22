@@ -39,12 +39,12 @@ public class testtabledef {
 
 	@Test
 	public void testfacttbl() throws IOException {
-		tabledata lfacttable = new tabledata("fact_table");
+		tablemd lfacttable = new tablemd("fact_table");
 		
-		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, analyticsops.order.Ascend, "0-"));
-		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, analyticsops.order.Random, "0-1"));
+		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, analyticsops.order.Ascend, "0~"));
+		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, analyticsops.order.Random, "0~1"));
 		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, analyticsops.order.Random, "2012-06-28~2014-06-15"));
-		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, analyticsops.order.Random, "0-255"));
+		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, analyticsops.order.Random, "0~255"));
 		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
 		
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
@@ -59,23 +59,21 @@ public class testtabledef {
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/tmp/testfacttbl.json");
 		
-		tabledata lfacttable = lconfigparser.deserialize(tabledata.class);
-		System.out.println(lfacttable.getmFactTableName());
+		tablemd lfacttable = lconfigparser.deserialize(tablemd.class);
+		System.out.println(lfacttable.getmTableName());
 	}
 	
 	@Test
 	public void testLUtbl() throws IOException {
-		tabledata lfacttable = new tabledata("fact_table");
+		tablemd lfacttable = new tablemd("fact_table");
 		
-		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, analyticsops.order.Ascend, "0-"));
-		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, analyticsops.order.Random, "0-1"));
+		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, analyticsops.order.Ascend, "0~"));
+		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, analyticsops.order.Random, "0~1"));
 		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, analyticsops.order.Random, "2012-06-28~2014-06-15"));
-		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, analyticsops.order.Random, "0-255"));
+		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, analyticsops.order.Random, "0~255"));
 		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
 		
-		tablemd llookuptable = new tablemd("LU_date", lfacttable);
-		
-		llookuptable.adddependency(new int[] {2});
+		tablemd llookuptable = new tablemd("LU_date");
 		
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/tmp/testLUtbl.json");

@@ -24,6 +24,4 @@ package org.artemis.toolkit.table.gen;
  */
 public class genfacttable {
 	
-	
-	
 }

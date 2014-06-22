@@ -39,6 +39,7 @@ public class jobexecutor {
 	public jobexecutor() {
 		mExecutorService = //Executors.newCachedThreadPool();
 				Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+		LOG.info("executor fixed threads count: " + Integer.toString(Runtime.getRuntime().availableProcessors() * 2));
 	}
 	
 	/**
