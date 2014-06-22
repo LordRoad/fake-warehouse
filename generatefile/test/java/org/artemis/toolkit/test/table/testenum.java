@@ -32,7 +32,7 @@ import org.junit.runners.JUnit4;
  * @author return_jun
  */
 @RunWith(JUnit4.class)
-public class enumtest {
+public class testenum {
 	
 	@Test
 	public void dttest() throws IOException {

@@ -38,23 +38,27 @@ import org.junit.runners.JUnit4;
  * @author return_jun
  */
 @RunWith(JUnit4.class)
-public class reportdef {
+public class testreportdef {
 
 	@Test
 	public void testreportdef() throws IOException {
-		tabledata lfacttable = new tabledata("fact_table");
+		tablemd lfacttable = new tablemd("fact_table");
 		
 		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, order.Ascend, "0-"));
 		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, order.Random, "0-1"));
 		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
 		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, order.Random, "0-255"));
 		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
+		lfacttable.setmTableSlice(32);
+		lfacttable.setmTableRowcount(100000000);
 		
-		tablemd llookuptable = new tablemd("LU_date", lfacttable);
-		llookuptable.adddependency(new int[] {2});
+		tablemd llookuptable = new tablemd("LU_date");
+		llookuptable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
+		llookuptable.setmTableRowcount(365);
 		
-		tablemd llookuptable2 = new tablemd("LU_index", lfacttable);
-		llookuptable2.adddependency(new int[] {0,1});
+		tablemd llookuptable2 = new tablemd("LU_index");
+		llookuptable2.insertnewcolumn(new columnmd("index", datatype.INT, order.Ascend, "1~100000"));
+		llookuptable2.setmTableRowcount(10000);
 		
 		reportmd lreport = new reportbuilder().addFactTable(lfacttable)
 				.addLUTable(llookuptable)
@@ -75,11 +79,11 @@ public class reportdef {
 		
 		reportmd lreport = lconfigparser.deserialize(reportmd.class);
 		
-		System.out.println("fact tabledata name: " + lreport.getmfacttable().getmFactTableName());
+		System.out.println("fact tabledata name: " + lreport.getmfacttable().getmTableName());
 		
 		List<tablemd> lLUtableset = lreport.getmlookuptableset();
 		for (tablemd lLUtable : lLUtableset) {
-			System.out.println("lookup tabledata name: " + lLUtable.gettblname());
+			System.out.println("lookup tabledata name: " + lLUtable.getmTableName());
 		}
 		
 	}

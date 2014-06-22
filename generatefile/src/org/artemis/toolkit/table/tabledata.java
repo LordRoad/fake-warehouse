@@ -17,13 +17,8 @@
  */
 package org.artemis.toolkit.table;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.annotations.SerializedName;
 
 /**
  * tabledata TODO
@@ -44,15 +39,6 @@ public class tabledata {
 	}
 	
 	public void putColumnData(int iColumnIndex, String [] iColumnData) {
-		if (iColumnData == null) {
-			throw new RuntimeException();
-			LOG.error("column data is null for lookup tabledata: " + mlookuptable.getmTableName());
-			return;
-		}
-		if (iColumnIndex < 0 || iColumnIndex >= mlookuptable.getColumnCount()) {
-			LOG.error("column data is null for lookup tabledata: " + mlookuptable.getmTableName());
-			return;
-		}
 		mColumnsData[iColumnIndex] = iColumnData;
 	}
 	

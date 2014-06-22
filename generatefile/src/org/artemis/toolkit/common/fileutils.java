@@ -19,6 +19,7 @@ package org.artemis.toolkit.common;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * fileutils TODO
@@ -42,6 +43,14 @@ public class fileutils {
 		lTestFile = new File(ifilepath);
 		if (!lTestFile.exists()) {
 			lTestFile.createNewFile();
+		}
+	}
+	
+	public static void initpath(String ipath) throws IOException {
+		File lTestPath = null;
+		lTestPath = new File(ipath);
+		if (!lTestPath.exists()) {
+			lTestPath.mkdir();
 		}
 	}
 	

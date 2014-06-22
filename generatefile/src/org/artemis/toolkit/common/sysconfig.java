@@ -26,4 +26,8 @@ public class sysconfig {
 
 	public static String sGenOneBatchRowCount = "org.artemis.toolkit.gen.onebatch";
 	
+	public static String sDataRangeSplit = "~";
+
+	public static String sFileExtension = ".csv";
+	
 }

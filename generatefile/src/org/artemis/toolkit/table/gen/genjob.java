@@ -30,12 +30,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * genjob TODO
+ * genjob generate data
  * genjob.java is written at Jun 17, 2014
  * @author junli
  */
 public class genjob implements Runnable {
 	private static final Logger LOG = LoggerFactory.getLogger(genjob.class);
+	private static long sDafaultBatchRowCount = 3000;
 	
 	private tabledata mtabledata = null;
 	private String mStoragePath = "";
@@ -131,7 +132,7 @@ public class genjob implements Runnable {
 		if (mNeedCache) {
 			
 			
-			
+			// need cache
 			
 		} else {
 			FileOutputStream lFileOutputStream = null;
@@ -147,11 +148,11 @@ public class genjob implements Runnable {
 			
 			String lOneBatchSetting = System.getProperty(sysconfig.sGenOneBatchRowCount);
 			
-			long lOneBatch = 100000;
+			long lOneBatch = sDafaultBatchRowCount;
 			if (lOneBatchSetting != null) {
 				try {
 					lOneBatch =  Long.parseLong(lOneBatchSetting);
-					lOneBatch = lOneBatch < 1 ? 100000 : lOneBatch;
+					lOneBatch = lOneBatch < 1 ? sDafaultBatchRowCount : lOneBatch;
 				} catch (NumberFormatException e) {
 					LOG.warn(e.getLocalizedMessage());
 				}
@@ -165,7 +166,7 @@ public class genjob implements Runnable {
 				lPrintWriter.flush();
 			}
 			if (lLastBatchRowCount > 0) {
-				lPrintWriter.println(genOneChunk(lOneBatch));
+				lPrintWriter.println(genOneChunk(lLastBatchRowCount));
 			}
 			
 			lPrintWriter.flush();
@@ -178,6 +179,9 @@ public class genjob implements Runnable {
 
 	private String genOneChunk(long irowcount) {
 		int lColCount = mgendata.length;
+		
+		long lBegin = System.currentTimeMillis();
+		
 		String lChunkData = "";
 		if (!mNeedLookup) {
 			int iter = 0;
@@ -185,7 +189,7 @@ public class genjob implements Runnable {
 			for ( iter = 0; iter < irowcount; ++iter) {
 				for (jter = 0; jter < lColCount - 1; ++jter) {
 					try {
-						lChunkData += mgendata[jter].generateOneItem() + ",";
+						lChunkData += "test";//mgendata[jter].generateOneItem() + ",";
 					} catch (NoMoreDataException e) {
 						lChunkData += ",";
 					}
@@ -196,6 +200,13 @@ public class genjob implements Runnable {
 				}
 				lChunkData += "\n";
 			}
+		}
+		
+		
+		if (irowcount >= sDafaultBatchRowCount) {
+			long lEnd = System.currentTimeMillis();
+			LOG.info("one batch time: " + Long.toString(lEnd - lBegin) + " millis");
+			System.out.println("one batch time: " + Long.toString(lEnd - lBegin) + " millis");
 		}
 		
 		return lChunkData;

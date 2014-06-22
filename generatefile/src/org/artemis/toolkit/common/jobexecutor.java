@@ -37,7 +37,8 @@ public class jobexecutor {
 	private ExecutorService mExecutorService;
 	
 	public jobexecutor() {
-		mExecutorService = Executors.newCachedThreadPool();
+		mExecutorService = //Executors.newCachedThreadPool();
+				Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 	}
 	
 	/**
@@ -73,6 +74,7 @@ public class jobexecutor {
 	
 	public boolean wait(long timeout, TimeUnit unit) {
 		try {
+			mExecutorService.shutdown(); // stop receiving new tasks
 			return mExecutorService.awaitTermination(timeout, unit);
 		} catch (InterruptedException e) {
 			LOG.warn(e.getLocalizedMessage());

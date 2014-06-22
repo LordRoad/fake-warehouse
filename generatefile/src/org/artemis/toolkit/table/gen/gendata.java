@@ -17,6 +17,7 @@
  */
 package org.artemis.toolkit.table.gen;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -98,6 +99,39 @@ public abstract class gendata {
 	 */
 	public abstract String generateOneItem();
 	
+	public abstract Object getLowerBound();
+	
+	public abstract Object getUpperBound();
+	
+	public static gendata getGenerator(Class<?> dataTypeName, order iorder, int istep, String irange) {
+		if (dataTypeName == Boolean.class) {
+			return new genBoolean(iorder, istep, irange);
+		} 
+		if (dataTypeName == Short.class) {
+			return new genShort(iorder, istep, irange);
+		}
+		if (dataTypeName == Integer.class) {
+			return new genInteger(iorder, istep, irange);
+		}
+		if (dataTypeName == Long.class) {
+			return new genLong(iorder, istep, irange);
+		}
+		if (dataTypeName == Double.class) {
+			return new genDouble(iorder, istep, irange);
+		}
+		if (dataTypeName == Date.class) {
+			return new genDate(iorder, istep, irange);
+		}
+		if (dataTypeName == String.class) {
+			return new genString(iorder, istep, irange);
+		}
+		if (dataTypeName == BigDecimal.class) {
+			return new genBigDecimal(iorder, istep, irange);
+		}
+		LOG.error("now " + dataTypeName.getSimpleName() + " is not supported.");
+		return null;
+	}
+
 }
 
 /**
@@ -123,6 +157,16 @@ class genBoolean extends gendata {
 	@Override
 	public String generateOneItem() {
 		return mbooltype == 2 ? Boolean.toString(mRandom.nextBoolean()) : (mbooltype == 1 ? "true" : "false");
+	}
+
+	@Override
+	public Object getLowerBound() {
+		return mbooltype == 2 ? false : mbooltype == 1 ? true : false;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		return mbooltype == 2 ? true : mbooltype == 1 ? true : false;
 	}
 
 }
@@ -181,6 +225,16 @@ class genShort extends gendata {
 		return Short.toString(lCurrentValue);
 	}
 
+	@Override
+	public Object getLowerBound() {
+		return mLowestValue;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		return mBoundaryValue;
+	}
+
 }
 
 
@@ -237,6 +291,16 @@ class genInteger extends gendata {
 		return Integer.toString(lCurrentValue);
 	}
 
+	@Override
+	public Object getLowerBound() {
+		return mLowestValue;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		return mBoundaryValue;
+	}
+
 }
 
 class genDouble extends gendata {
@@ -244,12 +308,22 @@ class genDouble extends gendata {
 	public genDouble(order iorder, int istep, String irange) {
 		super(iorder, istep, irange);
 		
-		
-		
 	}
 
 	@Override
 	public String generateOneItem() {
+		return null;
+	}
+
+	@Override
+	public Object getLowerBound() {
+		
+		return null;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		
 		return null;
 	}
 	
@@ -309,6 +383,16 @@ class genLong extends gendata {
 		return Long.toString(lCurrentValue);
 	}
 
+	@Override
+	public Object getLowerBound() {
+		return mLowestValue;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		return mBoundaryValue;
+	}
+
 }
 
 class genLongLong extends gendata {
@@ -325,6 +409,18 @@ class genLongLong extends gendata {
 		
 	}
 
+	@Override
+	public Object getLowerBound() {
+		
+		return null;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		
+		return null;
+	}
+	
 }
 
 class genDate extends gendata {
@@ -400,11 +496,19 @@ class genDate extends gendata {
 		return lDate;
 	}
 
+	@Override
+	public Object getLowerBound() {
+		return mLowestValue;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		return mBoundaryValue;
+	}
+
 }
 
 class genDateTime extends gendata {
-
-	
 	
 	public genDateTime(order iorder, int istep,
 			String irange) {
@@ -417,6 +521,18 @@ class genDateTime extends gendata {
 		
 		return null;
 		
+	}
+
+	@Override
+	public Object getLowerBound() {
+		
+		return null;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		
+		return null;
 	}
 
 }
@@ -432,6 +548,18 @@ class genTime extends gendata {
 		
 		return null;
 		
+	}
+
+	@Override
+	public Object getLowerBound() {
+		
+		return null;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		
+		return null;
 	}
 
 }
@@ -470,10 +598,22 @@ class genString extends gendata {
 		return mRandomData.nextHexString(mStringLength);
 	}
 
+	@Override
+	public Object getLowerBound() {
+		return mStringLength;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		return mStringLength;
+	}
+
 }
 
 class genBigDecimal extends gendata {
 
+	private BigDecimal mBigDecimal;
+	
 	public genBigDecimal(order iorder, int istep,
 			String irange) {
 		super(iorder, istep, irange);
@@ -481,9 +621,20 @@ class genBigDecimal extends gendata {
 
 	@Override
 	public String generateOneItem() {
-		
 		return null;
 		
+	}
+
+	@Override
+	public Object getLowerBound() {
+		
+		return null;
+	}
+
+	@Override
+	public Object getUpperBound() {
+		
+		return null;
 	}
 
 }

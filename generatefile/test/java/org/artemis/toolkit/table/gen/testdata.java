@@ -17,7 +17,6 @@
  */
 package org.artemis.toolkit.table.gen;
 
-import org.artemis.toolkit.table.datatype;
 import org.artemis.toolkit.table.analyticsops.order;
 import org.artemis.toolkit.table.gen.NoMoreDataException;
 import org.artemis.toolkit.table.gen.genBoolean;
@@ -41,7 +40,7 @@ public class testdata {
 
 	@Test
 	public void testRandomBoolean() {
-		genBoolean lgenBoolean = new genBoolean(datatype.BOOLEAN, order.Random, 0, "0~1");
+		genBoolean lgenBoolean = new genBoolean(order.Random, 0, "0~1");
 		
 		for (int iter = 0; iter < 32; ++iter) {
 			org.junit.Assert.assertThat(lgenBoolean.generateOneItem(), anyOf(is("true"), is("false")));
@@ -51,7 +50,7 @@ public class testdata {
 	
 	@Test
 	public void testAscBoolean() {
-		genBoolean lgenBoolean = new genBoolean(datatype.BOOLEAN, order.Ascend, 0, "0");
+		genBoolean lgenBoolean = new genBoolean(order.Ascend, 0, "0");
 		
 		for (int iter = 0; iter < 32; ++iter) {
 			org.junit.Assert.assertEquals("", lgenBoolean.generateOneItem(), "false");
@@ -61,7 +60,7 @@ public class testdata {
 	
 	@Test
 	public void testDescBoolean() {
-		genBoolean lgenBoolean = new genBoolean(datatype.BOOLEAN, order.Descend, 0, "1");
+		genBoolean lgenBoolean = new genBoolean(order.Descend, 0, "1");
 		
 		for (int iter = 0; iter < 32; ++iter) {
 			org.junit.Assert.assertEquals("", lgenBoolean.generateOneItem(), "true");
@@ -70,7 +69,7 @@ public class testdata {
 	
 	@Test
 	public void testRandomInt() {
-		genInteger lgenInteger = new genInteger(datatype.INT, order.Random, 0, "0~34952");
+		genInteger lgenInteger = new genInteger(order.Random, 0, "0~34952");
 		
 		for (int iter = 0; iter < 32; ++iter) {
 			int lRandomValue = Integer.parseInt(lgenInteger.generateOneItem());
@@ -82,7 +81,7 @@ public class testdata {
 	@Test
 	public void testAscInt() {
 		for (int step = 1; step < 3; ++step) {
-			genInteger lgenInteger = new genInteger(datatype.INT, order.Ascend, step, "0~256");
+			genInteger lgenInteger = new genInteger(order.Ascend, step, "0~256");
 			
 			// no more data
 			int lOldValue = 0 - step;
@@ -102,7 +101,7 @@ public class testdata {
 	@Test
 	public void testDescInt() {
 		for (int step = 1; step < 3; ++step) {
-			genInteger lgenInteger = new genInteger(datatype.INT, order.Descend, step, "-1000~256");
+			genInteger lgenInteger = new genInteger(order.Descend, step, "-1000~256");
 			
 			// no more data
 			int lOldValue = 256 + step;
@@ -121,7 +120,7 @@ public class testdata {
 	
 	@Test
 	public void testRandomLong() {
-		genLong lgenLong = new genLong(datatype.LONG, order.Random, 0, "0~20140616");
+		genLong lgenLong = new genLong(order.Random, 0, "0~20140616");
 		
 		for (int iter = 0; iter < 2048; ++iter) {
 			long lRandomValue = Long.parseLong(lgenLong.generateOneItem());
@@ -133,7 +132,7 @@ public class testdata {
 	@Test
 	@Ignore
 	public void testRandomDate1() {
-		genDate lgenDate = new genDate(datatype.DATE, order.Random, 1, "2012-12-25~");
+		genDate lgenDate = new genDate(order.Random, 1, "2012-12-25~");
 		
 		for (int iter = 0; iter < 32; ++iter) {
 			String lRandomValue = lgenDate.generateOneItem();
@@ -145,7 +144,7 @@ public class testdata {
 	@Test
 	@Ignore
 	public void testRandomDate2() {
-		genDate lgenDate = new genDate(datatype.DATE, order.Random, 1, "~");
+		genDate lgenDate = new genDate(order.Random, 1, "~");
 		
 		for (int iter = 0; iter < 32; ++iter) {
 			String lRandomValue = lgenDate.generateOneItem();
@@ -157,7 +156,7 @@ public class testdata {
 	@Test
 	@Ignore
 	public void testRandomDate3() {
-		genDate lgenDate = new genDate(datatype.DATE, order.Random, 1, "~2005-05-05");
+		genDate lgenDate = new genDate(order.Random, 1, "~2005-05-05");
 		
 		for (int iter = 0; iter < 32; ++iter) {
 			String lRandomValue = lgenDate.generateOneItem();
@@ -169,7 +168,7 @@ public class testdata {
 	@Test
 	@Ignore
 	public void testRandomDate4() {
-		genDate lgenDate = new genDate(datatype.DATE, order.Random, 1, "2011-11-11~2014-11-11");
+		genDate lgenDate = new genDate(order.Random, 1, "2011-11-11~2014-11-11");
 		
 		for (int iter = 0; iter < 32; ++iter) {
 			String lRandomValue = lgenDate.generateOneItem();
@@ -181,7 +180,7 @@ public class testdata {
 	@Test
 	@Ignore
 	public void testAscDate() {
-		genDate lgenDate = new genDate(datatype.DATE, order.Ascend, 1, "2011-12-11~2012-01-01");
+		genDate lgenDate = new genDate(order.Ascend, 1, "2011-12-11~2012-01-01");
 		
 		for (int iter = 0; iter < 48; ++iter) {
 			try {
@@ -196,7 +195,7 @@ public class testdata {
 	@Test
 	@Ignore
 	public void testDescDate() {
-		genDate lgenDate = new genDate(datatype.DATE, order.Descend, 1, "2011-12-11~2012-01-01");
+		genDate lgenDate = new genDate(order.Descend, 1, "2011-12-11~2012-01-01");
 		
 		for (int iter = 0; iter < 48; ++iter) {
 			try {
@@ -209,8 +208,9 @@ public class testdata {
 	}
 	
 	@Test
+	@Ignore
 	public void testRandomString() {
-		genString lgenString = new genString(datatype.STRING, order.Random, 1, "~12");
+		genString lgenString = new genString(order.Random, 1, "~12");
 		
 		for (int iter = 0; iter < 16; ++iter) {
 			try {
@@ -220,6 +220,14 @@ public class testdata {
 				// ignore
 			}
 		}
+	}
+	
+	@Test
+	public void testMinus() {
+		Double l1 = (double) 10;
+		Double l2 = (double) 20;
+		double lRange = l1 -l2;
+		System.out.println(Double.toString(lRange));
 	}
 	
 }

@@ -17,11 +17,13 @@
  */
 package org.artemis.toolkit.table.gen;
 
+import java.util.Date;
 import java.util.List;
 
+import org.artemis.toolkit.common.sysconfig;
 import org.artemis.toolkit.metadata.columnmd;
 import org.artemis.toolkit.metadata.tablemd;
-import org.artemis.toolkit.table.analyticsops.order;
+import org.artemis.toolkit.table.datarange;
 import org.artemis.toolkit.table.tabledata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,61 +35,8 @@ import org.slf4j.LoggerFactory;
  */
 public class genlutable {
 	private static final Logger LOG = LoggerFactory.getLogger(genlutable.class);
-			
-	private final tablemd mlookuptable;
-	private boolean mDone = false;
-	private tabledata[] mtabledataset;
-	private tablemd[] mjobtablesmd;
 	
-	public genlutable(tablemd ilookuptable) {
-		mlookuptable = ilookuptable;
-		int lColumnCount = mlookuptable.getcolcount();
-		if (lColumnCount < 1) {
-			mDone = true;
-		} else {
-			int lTableSlice = (int) mlookuptable.getmTableSlice();
-			mtabledataset = new tabledata[lTableSlice > 0 ? lTableSlice : 1];
-		}
-		
-	}
-	
-	protected void initjobtablemd() {
-		int lTableSlice = (int) mlookuptable.getmTableSlice();
-		mjobtablesmd = new tablemd[lTableSlice > 0 ? lTableSlice : 1]; 
-		if (mjobtablesmd.length == 1) {
-			mjobtablesmd[0] = mlookuptable;
-			return;
-		}
-		
-		long lTotalRowCount = mlookuptable.getmTableRowcount();
-		long lOneBatchRC = lTotalRowCount / lTableSlice;
-		long lLastBatchRC = lTotalRowCount % lTableSlice;
-		
-		// set rows
-		for (int iter = 0; iter < lTableSlice - 1; ++iter) {
-			mjobtablesmd[iter].setmTableRowcount(lOneBatchRC);
-		}
-		mjobtablesmd[lTableSlice - 1].setmTableRowcount(lLastBatchRC);
-		
-		// set columns
-		List<columnmd> lColsMD = mlookuptable.getmColumns();
-		for (columnmd lcolumnmd : lColsMD) {
-			columnmd lNewColumnMD = new columnmd();
-			lNewColumnMD.setmColName(lcolumnmd.getmColName());
-			
-			for (int iter = 0; iter < lTableSlice; ++iter) {
-				
-				if (lcolumnmd.getmColOrder() == order.Random) {
-					
-				}
-			}
-			
-		}
-		
-	}
-	
-	protected void genjobs() {
-		
+	public genlutable(tablemd ilookuptable, String iStoragePath) {
 		
 	}
 	

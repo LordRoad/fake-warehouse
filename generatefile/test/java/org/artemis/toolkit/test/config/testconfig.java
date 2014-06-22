@@ -31,16 +31,16 @@ import org.junit.runners.JUnit4;
  * @author junli
  */
 @RunWith(JUnit4.class)
-public class configtest {
+public class testconfig {
 	
 	@Test
 	//@Ignore
 	public void writetest() throws IOException {
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
-				"/lookuptblconfig.json");
+				"/tmp/lookuptblconfig.json");
 		
-		tablemd llookuptable = new tablemd("LU_table", null);
-		llookuptable.settblname("LU_table");
+		tablemd llookuptable = new tablemd("LU_table");
+		llookuptable.setmTableName("LU_table");
 		
 		lconfigparser.serialize(llookuptable);
 	}
@@ -53,7 +53,7 @@ public class configtest {
 		
 		tablemd llookuptable = lconfigparser.deserialize(tablemd.class);
 		if (llookuptable != null) {
-			System.out.println(llookuptable.gettblname());
+			System.out.println(llookuptable.getmTableName());
 		}
 		
 	}

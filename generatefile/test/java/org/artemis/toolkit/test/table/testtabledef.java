@@ -35,7 +35,7 @@ import org.junit.runners.JUnit4;
  * @author return_jun
  */
 @RunWith(JUnit4.class)
-public class tabledef {
+public class testtabledef {
 
 	@Test
 	public void testfacttbl() throws IOException {
