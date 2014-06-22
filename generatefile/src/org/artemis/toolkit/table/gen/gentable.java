@@ -17,6 +17,7 @@
  */
 package org.artemis.toolkit.table.gen;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -59,7 +60,7 @@ public class gentable {
 			int lTableSlice = (int) mlookuptable.getmTableSlice();
 			mtabledataset = new tabledata[lTableSlice > 0 ? lTableSlice : 1];
 		}
-		mStoragePath = iStoragePath + "/" + mlookuptable.getmTableName();
+		mStoragePath = iStoragePath + File.separator + mlookuptable.getmTableName();
 		mjobexecutor = new jobexecutor();
 		mNeedCache = iNeedCache;
 	}

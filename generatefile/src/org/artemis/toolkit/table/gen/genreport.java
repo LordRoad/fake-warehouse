@@ -17,6 +17,7 @@
  */
 package org.artemis.toolkit.table.gen;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -87,7 +88,7 @@ public class genreport {
 		}
 		LOG.trace("start generating report");
 		
-		String lReportpath = mStoragePath + "/" + mReportName;
+		String lReportpath = mStoragePath + File.separator + mReportName;
 		try {
 			fileutils.initpath(lReportpath);
 		} catch (IOException e) {
