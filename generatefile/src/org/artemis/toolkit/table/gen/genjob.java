@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class genjob implements Runnable {
 	private static final Logger LOG = LoggerFactory.getLogger(genjob.class);
-	private static long sDafaultBatchRowCount = 3000;
+	private static long sDafaultBatchRowCount = 100000;
 	
 	private tabledata mtabledata = null;
 	private String mStoragePath = "";
@@ -180,36 +180,44 @@ public class genjob implements Runnable {
 	private String genOneChunk(long irowcount) {
 		int lColCount = mgendata.length;
 		
-		long lBegin = System.currentTimeMillis();
+		//long lBegin = System.currentTimeMillis();
 		
-		String lChunkData = "";
+		StringBuilder lChunkData = new StringBuilder();
+		
+		/**
+		 * DO NOT use str1 += str2; it will be str1 = str1 + str2; -> new StringBuilder(str1).append(str2).toString();
+		 * it will create one string and append one and create string object, then copy it to str1. it's bad.
+		 * so should use append (byte copy)
+		 */
+		
 		if (!mNeedLookup) {
 			int iter = 0;
 			int jter = 0;
 			for ( iter = 0; iter < irowcount; ++iter) {
 				for (jter = 0; jter < lColCount - 1; ++jter) {
 					try {
-						lChunkData += "test";//mgendata[jter].generateOneItem() + ",";
+						lChunkData.append(mgendata[jter].generateOneItem()).append(",");
 					} catch (NoMoreDataException e) {
-						lChunkData += ",";
+						lChunkData.append(",");
 					}
 				}
 				try {
-					lChunkData += mgendata[(int) (lColCount - 1)].generateOneItem();
+					lChunkData.append(mgendata[(int) (lColCount - 1)].generateOneItem());
 				} catch (NoMoreDataException e) {
 				}
-				lChunkData += "\n";
+				lChunkData.append("\n");
 			}
 		}
 		
-		
+		/*
 		if (irowcount >= sDafaultBatchRowCount) {
 			long lEnd = System.currentTimeMillis();
 			LOG.info("one batch time: " + Long.toString(lEnd - lBegin) + " millis");
 			System.out.println("one batch time: " + Long.toString(lEnd - lBegin) + " millis");
 		}
+		*/
 		
-		return lChunkData;
+		return lChunkData.toString();
 	}
 	
 }

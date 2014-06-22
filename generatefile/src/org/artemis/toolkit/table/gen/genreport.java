@@ -88,6 +88,8 @@ public class genreport {
 		}
 		LOG.trace("start generating report");
 		
+		long lBegin = System.currentTimeMillis();
+		
 		String lReportpath = mStoragePath + File.separator + mReportName;
 		try {
 			fileutils.initpath(lReportpath);
@@ -103,11 +105,21 @@ public class genreport {
 			lgentable.wait(1, TimeUnit.DAYS);
 		}
 		
+		long lEnd = System.currentTimeMillis();
+		LOG.info("generate lookup table time : " + Long.toString(lEnd - lBegin) + " millis");
+		System.out.println("generate lookup table time: " + Long.toString(lEnd - lBegin) + " millis");
+		
+		lBegin = lEnd;
+		
 		tablemd lFactTable = mReport.getmfacttable();
 		gentable lgentable = new gentable(lFactTable, lReportpath, false);
 		
 		lgentable.genTableData();
 		lgentable.wait(1, TimeUnit.DAYS);
+		
+		lEnd = System.currentTimeMillis();
+		LOG.info("generate fact table time : " + Long.toString(lEnd - lBegin) + " millis");
+		System.out.println("generate fact table time: " + Long.toString(lEnd - lBegin) + " millis");
 		
 		LOG.trace("end of generating report");
 	}
