@@ -107,7 +107,7 @@ public class genreport {
 		
 		long lEnd = System.currentTimeMillis();
 		LOG.info("generate lookup table time : " + Long.toString(lEnd - lBegin) + " millis");
-		System.out.println("generate lookup table time: " + Long.toString(lEnd - lBegin) + " millis");
+		//System.out.println("generate lookup table time: " + Long.toString(lEnd - lBegin) + " millis");
 		
 		lBegin = lEnd;
 		
@@ -119,7 +119,7 @@ public class genreport {
 		
 		lEnd = System.currentTimeMillis();
 		LOG.info("generate fact table time : " + Long.toString(lEnd - lBegin) + " millis");
-		System.out.println("generate fact table time: " + Long.toString(lEnd - lBegin) + " millis");
+		//System.out.println("generate fact table time: " + Long.toString(lEnd - lBegin) + " millis");
 		
 		LOG.trace("end of generating report");
 	}

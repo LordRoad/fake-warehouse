@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class genjob implements Runnable {
 	private static final Logger LOG = LoggerFactory.getLogger(genjob.class);
-	private static long sDafaultBatchRowCount = 100000;
+	private static long sDafaultBatchRowCount = 10000;
 	
 	private tabledata mtabledata = null;
 	private String mStoragePath = "";
@@ -44,11 +44,13 @@ public class genjob implements Runnable {
 	private boolean mNeedCache = false;
 	private gendata[] mgendata;
 	private boolean mNeedLookup = false;
+	private int[] mCacheColumnIndexs = null; 
 	
-	public genjob(tablemd itablemd, String iStoragepath, boolean iNeedCache) {
+	public genjob(tablemd itablemd, String iStoragepath, boolean iNeedCache, int[] iCacheIndex) {
 		mtablemd = itablemd;
 		mStoragePath = iStoragepath;
 		mNeedCache = iNeedCache;
+		mCacheColumnIndexs = iCacheIndex;
 		
 		if (!init()) {
 			throw new RuntimeException("genjob init failed");
@@ -69,6 +71,10 @@ public class genjob implements Runnable {
 		if (lColumnCount < 1) {
 			LOG.error("column count should be larger than one for table: " + mtablemd.getmTableName());
 			return false;
+		}
+		
+		if (mNeedCache) {
+			
 		}
 		
 		mgendata = new gendata[lColumnCount];
@@ -129,44 +135,46 @@ public class genjob implements Runnable {
 			LOG.error("row count should be larger than one for table: " + mtablemd.getmTableName());
 			return;
 		}
+		
+		FileOutputStream lFileOutputStream = null;
+		PrintWriter lPrintWriter = null;
+		try {
+			fileutils.initfile(mStoragePath);
+			lFileOutputStream = new FileOutputStream(mStoragePath, false);
+			lPrintWriter = new PrintWriter(lFileOutputStream);
+		} catch (IOException e) {
+			LOG.error(e.getLocalizedMessage());
+			return;
+		} 
+		
+		String lOneBatchSetting = System.getProperty(sysconfig.sGenOneBatchRowCount);
+		
+		long lOneBatch = sDafaultBatchRowCount;
+		if (lOneBatchSetting != null) {
+			try {
+				lOneBatch =  Long.parseLong(lOneBatchSetting);
+				lOneBatch = lOneBatch < 1 ? sDafaultBatchRowCount : lOneBatch;
+			} catch (NumberFormatException e) {
+				LOG.warn(e.getLocalizedMessage());
+			}
+		}
+		
+		long lBatchCount = (long)(lRowCount / lOneBatch);
+		long lLastBatchRowCount = lRowCount % lOneBatch;
+		
 		if (mNeedCache) {
 			
 			
 			// need cache
 			
 		} else {
-			FileOutputStream lFileOutputStream = null;
-			PrintWriter lPrintWriter = null;
-			try {
-				fileutils.initfile(mStoragePath);
-				lFileOutputStream = new FileOutputStream(mStoragePath, false);
-				lPrintWriter = new PrintWriter(lFileOutputStream);
-			} catch (IOException e) {
-				LOG.error(e.getLocalizedMessage());
-				return;
-			} 
-			
-			String lOneBatchSetting = System.getProperty(sysconfig.sGenOneBatchRowCount);
-			
-			long lOneBatch = sDafaultBatchRowCount;
-			if (lOneBatchSetting != null) {
-				try {
-					lOneBatch =  Long.parseLong(lOneBatchSetting);
-					lOneBatch = lOneBatch < 1 ? sDafaultBatchRowCount : lOneBatch;
-				} catch (NumberFormatException e) {
-					LOG.warn(e.getLocalizedMessage());
-				}
-			}
-			
-			long lBatchCount = (long)(lRowCount / lOneBatch);
-			long lLastBatchRowCount =  lRowCount % lOneBatch;
 			
 			for (long index = 0; index < lBatchCount; ++index) {
-				lPrintWriter.println(genOneChunk(lOneBatch));
+				lPrintWriter.print(genOneChunk(lOneBatch));
 				lPrintWriter.flush();
 			}
 			if (lLastBatchRowCount > 0) {
-				lPrintWriter.println(genOneChunk(lLastBatchRowCount));
+				lPrintWriter.print(genOneChunk(lLastBatchRowCount));
 			}
 			
 			lPrintWriter.flush();
@@ -177,47 +185,75 @@ public class genjob implements Runnable {
 				", storage path: " + this.mStoragePath + ") is done successfully.");
 	}
 
+	private String genOneChunkAndCache(long irowcount) {
+		return null;
+	}
+	
+	private String[] genOneColumn(int iColumnIndex) {
+		int lColCount = mgendata.length;
+		if (iColumnIndex < 0 || iColumnIndex >= lColCount) {
+			return null;
+		}
+		
+		//String[] lWholeColumnData = new String[mtablemd.getmTableRowcount()];
+		
+		return null;
+	}
+	
 	private String genOneChunk(long irowcount) {
 		int lColCount = mgendata.length;
 		
 		//long lBegin = System.currentTimeMillis();
 		
-		StringBuilder lChunkData = new StringBuilder();
-		
-		/**
-		 * DO NOT use str1 += str2; it will be str1 = str1 + str2; -> new StringBuilder(str1).append(str2).toString();
-		 * it will create one string and append one and create string object, then copy it to str1. it's bad.
-		 * so should use append (byte copy)
-		 */
-		
-		if (!mNeedLookup) {
-			int iter = 0;
-			int jter = 0;
-			for ( iter = 0; iter < irowcount; ++iter) {
-				for (jter = 0; jter < lColCount - 1; ++jter) {
-					try {
-						lChunkData.append(mgendata[jter].generateOneItem()).append(",");
-					} catch (NoMoreDataException e) {
-						lChunkData.append(",");
+		while (true) {
+			StringBuilder lChunkData = new StringBuilder();
+			
+			/**
+			 * DO NOT use str1 += str2; it will be str1 = str1 + str2; -> new StringBuilder(str1).append(str2).toString();
+			 * it will create one string and append one and create string object, then copy it to str1. it's bad.
+			 * so should use append (byte copy)
+			 */
+			try {
+				if (!mNeedLookup) {
+					int iter = 0;
+					int jter = 0;
+					for ( iter = 0; iter < irowcount; ++iter) {
+						for (jter = 0; jter < lColCount - 1; ++jter) {
+							try {
+								lChunkData.append(mgendata[jter].generateOneItem()).append(",");
+							} catch (NoMoreDataException e) {
+								lChunkData.append(",");
+							}
+						}
+						try {
+							lChunkData.append(mgendata[(int) (lColCount - 1)].generateOneItem());
+						} catch (NoMoreDataException e) {
+						}
+						lChunkData.append("\n");
 					}
 				}
+			} catch (OutOfMemoryError e) {
+				lChunkData = null;
+				System.gc();
 				try {
-					lChunkData.append(mgendata[(int) (lColCount - 1)].generateOneItem());
-				} catch (NoMoreDataException e) {
+					Thread.sleep(300);
+				} catch (InterruptedException e1) {
+					// ignore
 				}
-				lChunkData.append("\n");
+				System.gc();
+				continue;
 			}
+			
+			/*
+			if (irowcount >= sDafaultBatchRowCount) {
+				long lEnd = System.currentTimeMillis();
+				LOG.info("one batch time: " + Long.toString(lEnd - lBegin) + " millis");
+				System.out.println("one batch time: " + Long.toString(lEnd - lBegin) + " millis");
+			}
+			*/
+			
+			return lChunkData.toString();
 		}
-		
-		/*
-		if (irowcount >= sDafaultBatchRowCount) {
-			long lEnd = System.currentTimeMillis();
-			LOG.info("one batch time: " + Long.toString(lEnd - lBegin) + " millis");
-			System.out.println("one batch time: " + Long.toString(lEnd - lBegin) + " millis");
-		}
-		*/
-		
-		return lChunkData.toString();
 	}
 	
 }

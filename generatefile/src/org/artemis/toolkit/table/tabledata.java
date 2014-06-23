@@ -29,13 +29,25 @@ public class tabledata {
 	private static final Logger LOG = LoggerFactory.getLogger(tabledata.class);
 
 	private String[][] mColumnsData;
+	private int mColumnCount = 0;
 	
 	public tabledata(int iColumnCount) {
+		mColumnCount = iColumnCount < 0 ? 0 : iColumnCount;
 		mColumnsData = new String[iColumnCount][];
 	}
 
 	public void flushDataIntoDisk(String iStoragePath) {
 		
+	}
+	
+	public boolean isColumnEmpty(int iColumnIndex) {
+		if (iColumnIndex < 0 || iColumnIndex > mColumnCount) return true;
+		return mColumnsData[iColumnIndex] == null;
+	}
+	
+	public String[] getColumnData(int iColumnIndex) {
+		if (iColumnIndex < 0 || iColumnIndex > mColumnCount) return null;
+		return mColumnsData[iColumnIndex];
 	}
 	
 	public void putColumnData(int iColumnIndex, String [] iColumnData) {

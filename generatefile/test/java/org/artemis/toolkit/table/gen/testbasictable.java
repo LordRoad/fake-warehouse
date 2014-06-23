@@ -40,7 +40,7 @@ public class testbasictable {
 		
 		tablemd lfacttable = new tablemd("fact_table");
 		
-		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, order.Ascend, "0~10000000"));
+		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, order.Ascend, "1~10000000"));
 		lfacttable.insertnewcolumn(new columnmd("gender", datatype.BOOLEAN, order.Random, "0~1"));
 		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
 		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, order.Random, "10"));
@@ -49,10 +49,12 @@ public class testbasictable {
 		lfacttable.setmTableRowcount(10000000);
 		
 		tablemd llookuptable = new tablemd("LU_date");
+		llookuptable.insertnewcolumn(new columnmd("id", datatype.INT, order.Ascend, "1~366"));
 		llookuptable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
 		llookuptable.setmTableRowcount(365);
 		
 		tablemd llookuptable2 = new tablemd("LU_index");
+		llookuptable2.insertnewcolumn(new columnmd("id", datatype.INT, order.Ascend, "1~10001"));
 		llookuptable2.insertnewcolumn(new columnmd("index", datatype.INT, order.Ascend, "1~100000"));
 		llookuptable2.setmTableRowcount(10000);
 		llookuptable2.setmTableSlice(32);

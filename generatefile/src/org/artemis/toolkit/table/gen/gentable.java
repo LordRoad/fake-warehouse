@@ -49,7 +49,7 @@ public class gentable {
 	
 	private jobexecutor mjobexecutor;
 	private genjob[] mgenjob;
-	
+	private int[] mNeedCacheIndexs;
 	
 	public gentable(tablemd ilookuptable, String iStoragePath, boolean iNeedCache) {
 		mlookuptable = ilookuptable;
@@ -160,7 +160,7 @@ public class gentable {
 		
 		mgenjob = new genjob[lJobs];
 		for (int iter = 0; iter < lJobs; ++iter) {
-			mgenjob[iter] = new genjob(mjobtablesmd[iter], lStoragepath[iter], mNeedCache);
+			mgenjob[iter] = new genjob(mjobtablesmd[iter], lStoragepath[iter], mNeedCache, mNeedCacheIndexs);
 		}
 		return true;
 	}

@@ -15,24 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.common;
+package org.artemis.toolkit.metadata;
+
+import java.sql.DatabaseMetaData;
 
 /**
- * sysconfig TODO
- * sysconfig.java is written at Jun 21, 2014
+ * relationship TODO
+ * relationship.java is written at Jun 23, 2014
  * @author junli
  */
-public class sysconfig {
-
-	public static String sGenOneBatchRowCount = "org.artemis.toolkit.gen.onebatch";
+public class relationship {
 	
-	public static String sDataRangeSplit = "~";
-
-	public static String sFileExtension = ".csv";
-	
-	public static String sLog4J = "log4j.configuration";
-	
-	public static String sDefaultLog4JPath = 
-			"file:" + System.getProperty("user.dir") + "/config/log4j.properties";
-	
+	public relationship() {
+		DatabaseMetaData lTest; 
+	}
 }

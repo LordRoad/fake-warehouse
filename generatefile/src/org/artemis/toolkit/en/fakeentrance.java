@@ -15,42 +15,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.common;
+package org.artemis.toolkit.en;
 
-import java.io.File;
 import java.io.IOException;
 
+import org.artemis.toolkit.common.sysconfig;
+import org.artemis.toolkit.table.gen.genreport;
+
 /**
- * fileutils TODO
- * fileutils.java is written at Jun 13, 2014
+ * fakeentrance TODO
+ * fakeentrance.java is written at Jun 23, 2014
  * @author junli
  */
-public class fileutils {
-	
-	public static boolean exists(String ifilepath) {
-		File lFile = new File(ifilepath);
-		return lFile.exists();
-	}
-	
+public class fakeentrance {
+
 	/**
-	 * check if file is existed, if not, create new one
-	 * @param ifilepath
-	 * @throws IOException
+	 * @param args
 	 */
-	public static void initfile(String ifilepath) throws IOException {
-		File lTestFile = null;
-		lTestFile = new File(ifilepath);
-		if (!lTestFile.exists()) {
-			lTestFile.createNewFile();
+	public static void main(String[] args) {
+		String lLog4JConfig = System.getProperty(sysconfig.sLog4J);
+		if (lLog4JConfig == null)
+		{
+			System.setProperty(sysconfig.sLog4J, 
+					sysconfig.sDefaultLog4JPath);
 		}
-	}
-	
-	public static void initpath(String ipath) throws IOException {
-		File lTestPath = null;
-		lTestPath = new File(ipath);
-		if (!lTestPath.exists()) {
-			lTestPath.mkdir();
+		
+		if (args == null || args.length < 1) {
+			System.out.println("please input report configuration file");
+			return;
 		}
+		
+		try {
+			genreport lreportgenerate = genreport.createReportGenerate(args[0]);
+			
+			lreportgenerate.generateReport();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("");
 	}
-	
+
 }

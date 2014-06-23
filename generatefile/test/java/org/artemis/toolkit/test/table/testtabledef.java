@@ -24,7 +24,6 @@ import org.artemis.toolkit.metadata.columnmd;
 import org.artemis.toolkit.metadata.tablemd;
 import org.artemis.toolkit.table.analyticsops;
 import org.artemis.toolkit.table.datatype;
-import org.artemis.toolkit.table.tabledata;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
