@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
  * tabledata TODO
  * tabledata.java is written at Jun 14, 2014
  * @author return_jun
+ * @since 0.2
  */
 public class tabledata {
 	private static final Logger LOG = LoggerFactory.getLogger(tabledata.class);

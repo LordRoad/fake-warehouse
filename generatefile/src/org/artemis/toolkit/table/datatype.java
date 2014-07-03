@@ -21,7 +21,11 @@ package org.artemis.toolkit.table;
  * datatype TODO
  * datatype.java is written at Jun 14, 2014
  * @author return_jun
+ * @since 0.2
+ * @deprecated since 0.2.1, to support extra column type, enum is not suitable
+ * @see org.artemis.toolkit.table.newdatatype
  */
+@Deprecated
 public enum datatype {
 	INVALID("invalid"),
 	
@@ -106,8 +110,9 @@ public enum datatype {
 		if (idatatype.compareTo("bigdecimal") == 0) {
 			return BIGDECIMAL;
 		}
+		
 		return INVALID;
 	}
 	
-	
 }
+

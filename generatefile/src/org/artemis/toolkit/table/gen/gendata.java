@@ -44,6 +44,7 @@ class NoMoreDataException extends RuntimeException {
  * gendata generate data based on columnmd definition
  * gendata.java is written at Jun 16, 2014
  * @author junli
+ * @since 0.2
  */
 public abstract class gendata {
 	protected static final Logger LOG = LoggerFactory.getLogger(gendata.class);
@@ -132,6 +133,75 @@ public abstract class gendata {
 		return null;
 	}
 
+	public static gendata getCustomizedGenerator(extradata iextradata, order iorder, int istep, String irange) {
+		
+		genCustomizedData lgendata = new genCustomizedData(iorder, istep, irange);
+		lgendata.setOptions(iextradata.getRow());
+		
+		return lgendata;
+	}
+	
+}
+
+/**
+ * 
+ * genCustomizedData, user input data which comes from configure file
+ * such as:
+ * Monday,
+ * Tuesday,
+ * Wednesday,
+ * Thursday,
+ * Friday,
+ * Saturday,
+ * Sunday
+ */
+class genCustomizedData extends gendata {
+	private String[] mDataSet = null;
+	private int mDataLength = 0;
+	private int mCurrentIndex = 0;
+	private Random mRandom = new Random();
+
+	public genCustomizedData(order iorder, int istep, String irange) {
+		super(iorder, istep, irange);
+		if (mOrderOps == 1) {
+			mCurrentIndex = 0;
+		} 
+	}
+
+	@Override
+	public final String generateOneItem() {
+		if (mOrderOps == 0) {
+			return mDataSet[mRandom.nextInt(mDataLength)];
+		} else if (mOrderOps == 1) {
+			if (mCurrentIndex >= mDataLength) {
+				throw new NoMoreDataException();
+			}
+			return mDataSet[mCurrentIndex++];
+		}
+		if (mCurrentIndex < 0) {
+			throw new NoMoreDataException();
+		}
+		return mDataSet[mCurrentIndex--];
+	}
+
+	@Override
+	public final Object getLowerBound() {
+		return null;
+	}
+
+	@Override
+	public final Object getUpperBound() {
+		return null;
+	}
+	
+	public void setOptions(String[] iDataSet) {
+		mDataSet = iDataSet;
+		mDataLength = iDataSet.length;
+		if (mOrderOps == 2) {
+			mCurrentIndex = mDataLength - 1;
+		}
+	}
+	
 }
 
 /**
@@ -155,17 +225,17 @@ class genBoolean extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		return mbooltype == 2 ? Boolean.toString(mRandom.nextBoolean()) : (mbooltype == 1 ? "true" : "false");
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		return mbooltype == 2 ? false : mbooltype == 1 ? true : false;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		return mbooltype == 2 ? true : mbooltype == 1 ? true : false;
 	}
 
@@ -209,7 +279,7 @@ class genShort extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		if (mOrderOps == 0) {
 			return Short.toString((short)(mRandom.nextInt(mBoundaryValue) % Short.MAX_VALUE));
 		}
@@ -226,12 +296,12 @@ class genShort extends gendata {
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		return mLowestValue;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		return mBoundaryValue;
 	}
 
@@ -271,7 +341,7 @@ class genInteger extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		if (mOrderOps == 0) {
 			return Integer.toString(mRandomData.nextInt(mLowestValue, mBoundaryValue));
 		}
@@ -292,12 +362,12 @@ class genInteger extends gendata {
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		return mLowestValue;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		return mBoundaryValue;
 	}
 
@@ -311,18 +381,18 @@ class genDouble extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		return null;
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		
 		return null;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		
 		return null;
 	}
@@ -362,7 +432,7 @@ class genLong extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		if (mOrderOps == 0) {
 			return Long.toString(mRandomData.nextLong(mLowestValue, mBoundaryValue));
 		}
@@ -384,12 +454,12 @@ class genLong extends gendata {
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		return mLowestValue;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		return mBoundaryValue;
 	}
 
@@ -403,20 +473,20 @@ class genLongLong extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		
 		return null;
 		
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		
 		return null;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		
 		return null;
 	}
@@ -475,7 +545,7 @@ class genDate extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		if (mOrderOps == 0) {
 			Date lRandomDate = new Date((long) (mLowestValue + Math.random() * mDurationValue));
 			return mDateFormat.format(lRandomDate);
@@ -497,12 +567,12 @@ class genDate extends gendata {
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		return mLowestValue;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		return mBoundaryValue;
 	}
 
@@ -517,20 +587,20 @@ class genDateTime extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		
 		return null;
 		
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		
 		return null;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		
 		return null;
 	}
@@ -544,20 +614,20 @@ class genTime extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		
 		return null;
 		
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		
 		return null;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		
 		return null;
 	}
@@ -594,17 +664,17 @@ class genString extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		return mRandomData.nextHexString(mStringLength);
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		return mStringLength;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		return mStringLength;
 	}
 
@@ -620,19 +690,19 @@ class genBigDecimal extends gendata {
 	}
 
 	@Override
-	public String generateOneItem() {
+	public final String generateOneItem() {
 		return null;
 		
 	}
 
 	@Override
-	public Object getLowerBound() {
+	public final Object getLowerBound() {
 		
 		return null;
 	}
 
 	@Override
-	public Object getUpperBound() {
+	public final Object getUpperBound() {
 		
 		return null;
 	}

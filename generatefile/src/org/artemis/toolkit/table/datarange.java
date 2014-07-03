@@ -22,16 +22,24 @@ import java.util.Date;
 import org.artemis.toolkit.common.sysconfig;
 import org.artemis.toolkit.table.analyticsops.order;
 import org.artemis.toolkit.table.gen.gendata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * datarange data range
  * datarange.java is written at Jun 16, 2014
  * @author junli
+ * @since 0.2
  */
 public class datarange {
+	private static final Logger LOG = LoggerFactory.getLogger(datarange.class);
+	
 	private String mRangeRegex = sysconfig.sDataRangeSplit;
 	private String mOriginalDataRange;
 	private String[] mRangeOptions;
+	
+	private long mStandardSliceRowCount = -1;
+	private long mLastSliceRowCount = -1;
 	
 	public datarange(String idatarange) {
 		mOriginalDataRange = idatarange == null ? "" : idatarange;
@@ -63,14 +71,31 @@ public class datarange {
 	}
 	
 	/**
+	 * -1 means current data range is not split
+	 * @return
+	 */
+	public long getmStandardSliceRowCount() {
+		return mStandardSliceRowCount;
+	}
+
+	/**
+	 * -1 means current data range is not split
+	 * @return
+	 */
+	public long getmLastSliceRowCount() {
+		return mLastSliceRowCount;
+	}
+
+	/**
 	 * split range based on slice count.
 	 * @param dataTypeClass
+	 * @param irowcount, total row count to adapter data range
 	 * @param iorder
 	 * @param islice
 	 * @param istep
 	 * @return
 	 */
-	public <T> String[] splitRange(T dataTypeClass, order iorder, int islice, int istep) {
+	public <T> String[] splitRange(T dataTypeClass, long irowcount, order iorder, int islice, int istep) {
 		if (islice < 1) {
 			return null;
 		}
@@ -93,40 +118,60 @@ public class datarange {
 		
 		long lLowerBound = Long.parseLong(lgendata.getLowerBound().toString());
 		long lUpperBound = Long.parseLong(lgendata.getUpperBound().toString());
+		if (irowcount > 0 && iorder != order.Random && lUpperBound - lLowerBound > irowcount) {
+			if (iorder == order.Ascend) {
+				lUpperBound = lLowerBound + irowcount;
+			} else {
+				lLowerBound = lUpperBound - irowcount;
+			}
+		}
+		
 		if (dataTypeClass.getClass() == Date.class.getClass()) {
 			
 		} else {
 			// short, int, double, long
 			long lOneRange = (long) ((lUpperBound - lLowerBound) / islice);
 			
+			LOG.debug("split range: ");
+			++lOneRange;
 			if (iorder == order.Ascend) {
-				++lOneRange;
 				long lCurrentSliceLowerBound = lLowerBound;
 				for (int iter = 0; iter < islice - 1; ++iter) {
 					long lCurrentSliceUpperBound = lCurrentSliceLowerBound + lOneRange;
 					
 					lSplitRange[iter] = Long.toString(lCurrentSliceLowerBound) + mRangeRegex
 							+ Long.toString(lCurrentSliceUpperBound);
+					LOG.debug("range: " + lSplitRange[iter]);
 					
 					lCurrentSliceLowerBound = lCurrentSliceUpperBound;
 				}
 				lSplitRange[islice - 1] = Long.toString(lCurrentSliceLowerBound) + mRangeRegex
 						+ Long.toString(lUpperBound);
 				
+				mLastSliceRowCount = lUpperBound - lCurrentSliceLowerBound;
+				
+				LOG.debug("range: " + lSplitRange[islice - 1]);
+				
 			} else if (iorder == order.Descend) {
-				--lOneRange;
 				long lCurrentSliceUpperBound = lUpperBound;
 				for (int iter = 0; iter < islice - 1; ++iter) {
 					long lCurrentSliceLowerBound = lCurrentSliceUpperBound - lOneRange;
 					
 					lSplitRange[iter] = Long.toString(lCurrentSliceLowerBound) + mRangeRegex
 							+ Long.toString(lCurrentSliceUpperBound);
+					LOG.debug("range: " + lSplitRange[iter]);
 					
 					lCurrentSliceUpperBound = lCurrentSliceLowerBound;
 				}
 				lSplitRange[islice - 1] = Long.toString((Long)lLowerBound) + mRangeRegex
 						+ Long.toString(lCurrentSliceUpperBound);
+				
+				mLastSliceRowCount = lCurrentSliceUpperBound - lLowerBound;
+				
+				LOG.debug("range: " + lSplitRange[islice - 1]);
 			}
+			
+			mStandardSliceRowCount = lOneRange;
 		}
 		
 		return lSplitRange;

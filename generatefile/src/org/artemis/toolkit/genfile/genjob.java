@@ -17,21 +17,14 @@
  */
 package org.artemis.toolkit.genfile;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Random;
 
-import org.artemis.toolkit.common.configparser;
 import org.artemis.toolkit.common.fileutils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +34,10 @@ import org.slf4j.LoggerFactory;
  * genjob TODO
  * genjob.java is written at Jun 15, 2014
  * @author return_jun
+ * 
+ * @deprecated since 0.2
  */
+@Deprecated
 public class genjob implements Runnable {
 	private static final Logger LOG = LoggerFactory.getLogger(genjob.class);
 	

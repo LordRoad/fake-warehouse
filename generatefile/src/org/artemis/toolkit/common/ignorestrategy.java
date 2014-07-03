@@ -24,6 +24,7 @@ import com.google.gson.FieldAttributes;
  * ignorestrategy which class and fields should be ignored when doing serialize and deserialize
  * ignorestrategy.java is written at Jun 15, 2014
  * @author return_jun
+ * @since 0.2
  */
 public class ignorestrategy implements ExclusionStrategy {
 	

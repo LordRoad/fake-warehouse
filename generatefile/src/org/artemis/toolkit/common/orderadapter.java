@@ -32,6 +32,7 @@ import com.google.gson.JsonSerializer;
  * orderadapter TODO
  * orderadapter.java is written at Jun 15, 2014
  * @author return_jun
+ * @since 0.2
  */
 class orderSerializer implements JsonSerializer<order> {
 

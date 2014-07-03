@@ -15,30 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artemis.toolkit.table.gen;
-
-import java.util.Date;
-import java.util.List;
-
-import org.artemis.toolkit.common.sysconfig;
-import org.artemis.toolkit.metadata.columnmd;
-import org.artemis.toolkit.metadata.tablemd;
-import org.artemis.toolkit.table.datarange;
-import org.artemis.toolkit.table.tabledata;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * genlutable TODO
- * genlutable.java is written at Jun 15, 2014
- * @author junli
- * @since 0.2
+ * package-info SQL with generating syntax
+ * package-info.java is written at Jun 21, 2014
+ * @author return_jun
+ * @since 0.2.1
  */
-public class genlutable {
-	private static final Logger LOG = LoggerFactory.getLogger(genlutable.class);
-	
-	public genlutable(tablemd ilookuptable, String iStoragePath) {
-		
-	}
-	
-}
+package org.artemis.toolkit.gen.sql;

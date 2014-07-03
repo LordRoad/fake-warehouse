@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.artemis.toolkit.table.analyticsops.order;
-import org.artemis.toolkit.table.datatype;
+import org.artemis.toolkit.table.newdatatype;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
@@ -36,6 +36,7 @@ import com.google.gson.JsonSyntaxException;
  * configparser TODO
  * configparser.java is written at Jun 13, 2014
  * @author junli
+ * @since 0.2
  */
 public class configparser {
 	private static final Logger LOG = LoggerFactory.getLogger(configparser.class);
@@ -51,8 +52,8 @@ public class configparser {
 				.setPrettyPrinting()
 				.serializeNulls()
 				.setExclusionStrategies(new ignorestrategy(null))
-				.registerTypeAdapter(datatype.class, new dtSerializer())
-				.registerTypeAdapter(datatype.class, new dtDeserializer())
+				.registerTypeAdapter(newdatatype.class, new dtSerializer())
+				.registerTypeAdapter(newdatatype.class, new dtDeserializer())
 				.registerTypeAdapter(order.class, new orderSerializer())
 				.registerTypeAdapter(order.class, new orderDeserializer())
 				.create();

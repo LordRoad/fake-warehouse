@@ -18,6 +18,7 @@
 package org.artemis.toolkit.table.gen;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +27,9 @@ import org.artemis.toolkit.common.jobexecutor;
 import org.artemis.toolkit.common.sysconfig;
 import org.artemis.toolkit.metadata.columnmd;
 import org.artemis.toolkit.metadata.tablemd;
+import org.artemis.toolkit.table.analyticsops.order;
 import org.artemis.toolkit.table.datarange;
+import org.artemis.toolkit.table.newdatatype;
 import org.artemis.toolkit.table.tabledata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * gentable basic generate table process
  * gentable.java is written at Jun 19, 2014
  * @author junli
+ * @since 0.2
  */
 public class gentable {
 	private static final Logger LOG = LoggerFactory.getLogger(genlutable.class);
@@ -71,61 +75,173 @@ public class gentable {
 		for (int iter = 0; iter < mjobtablesmd.length; ++iter) {
 			mjobtablesmd[iter] = new tablemd(mlookuptable.getmTableName());
 		}
-		if (mjobtablesmd.length == 1) {
-			mjobtablesmd[0] = mlookuptable;
-			return true;
-		}
 		
-		long lTotalRowCount = mlookuptable.getmTableRowcount();
-		long lOneBatchRC = lTotalRowCount / lTableSlice;
-		long lLastBatchRC = lOneBatchRC + lTotalRowCount % lTableSlice;
-		
-		// set rows
-		for (int iter = 0; iter < lTableSlice - 1; ++iter) {
-			mjobtablesmd[iter].setmTableRowcount(lOneBatchRC);
-		}
-		mjobtablesmd[lTableSlice - 1].setmTableRowcount(lLastBatchRC);
-		
-		// set columns
 		List<columnmd> lColsMD = mlookuptable.getmColumns();
 		if (lColsMD == null || lColsMD.size() == 0) {
 			LOG.error("column is empty? r u kidding me?");
 			return false;
 		}
 		
-		String[][] lColumnsSet = new String[lColsMD.size()][];
+		if (mjobtablesmd.length == 1) {
+			mjobtablesmd[0] = mlookuptable;
+			
+			// check if contains any extra data type
+			for (int iter = 0; iter < lColsMD.size(); ++iter) {
+				columnmd lcolumnmd = lColsMD.get(iter);
+				newdatatype lnewdatatype = lcolumnmd.getmColType();
+				if (!lnewdatatype.isInnerDT()) {
+					try {
+						String lExtraDataPath = extraconfig.instance().getExtraDataPath(lnewdatatype.value());
+						extradatapool.instance().initdata(lnewdatatype.value(), lExtraDataPath);
+						extradata lextradata = extradatapool.instance().getExtraData(lnewdatatype.value());
+						
+						assert lextradata != null;
+					} catch (IOException e) {
+						LOG.error(e.getLocalizedMessage());
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+		
+		// get max data range
+		/**
+		 * for several linear columns, i think it will be ok to only check primitive type
+		 * (short, int, double, long) and find out the largest range to split the rows. but
+		 * 
+		 * here is a example:
+		 * int: 1~365
+		 * long: 1~10000
+		 * slice: 32
+		 * 
+		 * int: 11 number range for first slice
+		 * long: 312 number range for first slice which means slice one has 312 rows.
+		 * but column int will be 1,2,3,4,5,6,7,8,9,10,null,null...
+		 * 
+		 * that's just handle it this way
+		 */
+		long lTotalRowCount = mlookuptable.getmTableRowcount();
+		long lMaxRange = 0;
+		long lCurrentRange = 0;
+		int lBenchColumnIndex = -1;
 		for (int iter = 0; iter < lColsMD.size(); ++iter) {
 			columnmd lcolumnmd = lColsMD.get(iter);
-			datarange ldatarange = new datarange(lcolumnmd.getmColRange());
+			if (lcolumnmd.getmColOrder() == order.Random) {
+				continue;
+			}
+			newdatatype lnewdatatype = lcolumnmd.getmColType();
 			
-			switch (lcolumnmd.getmColType()) {
-			case BOOLEAN :
-				lColumnsSet[iter] = ldatarange.splitRange(new Boolean(true), lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
-				break;
-			case SHORT :
-				lColumnsSet[iter] = ldatarange.splitRange(new Short((short) 0), lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
-				break;
-			case INT :
-				lColumnsSet[iter] = ldatarange.splitRange(new Integer(0), lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
-				break;
-			case DOUBLE :
-				lColumnsSet[iter] = ldatarange.splitRange(new Double(2.0), lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
-				break;
-			case LONG :
-				lColumnsSet[iter] = ldatarange.splitRange(new Long(1), lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
-				break;
-			case DATE :
-				lColumnsSet[iter] = ldatarange.splitRange(new Date(), lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
-				break;
-			case STRING :
-				lColumnsSet[iter] = ldatarange.splitRange(new String(), lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
-				break;
-			default:
-				lColumnsSet[iter] = null;
-				LOG.error("column type " + lcolumnmd.getmColType().value() + " is not supported.");
+			Class<?> lClass = null;
+			if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sShort) == 0) {
+				lClass = Short.class;
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sInt) == 0) {
+				lClass = Integer.class;
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sDouble) == 0) {
+				lClass = Double.class;
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sLong) == 0) {
+				lClass = Long.class;
+			} else {
+				LOG.error("only support short, int, double, long as non random column");
 				return false;
 			}
+			
+			gendata lgendata = 
+					gendata.getGenerator(lClass, 
+							lcolumnmd.getmColOrder(), lcolumnmd.getmColStep(), lcolumnmd.getmColRange());
+			lCurrentRange = Long.parseLong(lgendata.getUpperBound().toString());
+			if (lCurrentRange > lMaxRange) {
+				lMaxRange = lCurrentRange;
+				lBenchColumnIndex = iter;
+			}
 		}
+		
+		
+		// set columns
+		String[][] lColumnsSet = new String[lColsMD.size()][];
+		int lLinearColumnCount = 0;
+		datarange lBenchDataRange = null;
+		for (int iter = 0; iter < lColsMD.size(); ++iter) {
+			columnmd lcolumnmd = lColsMD.get(iter);
+			if (lcolumnmd.getmColOrder() != order.Random) {
+				lLinearColumnCount++;
+			}
+			
+			datarange ldatarange = new datarange(lcolumnmd.getmColRange());
+			newdatatype lnewdatatype = lcolumnmd.getmColType();
+			if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sBoolean) == 0) {
+				lColumnsSet[iter] = ldatarange.splitRange(
+						new Boolean(true), lTotalRowCount, lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sShort) == 0) {
+				lColumnsSet[iter] = ldatarange.splitRange(
+						new Short((short) 0), lTotalRowCount, lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sInt) == 0) {
+				lColumnsSet[iter] = ldatarange.splitRange(
+						new Integer(0), lTotalRowCount, lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sDouble) == 0) {
+				lColumnsSet[iter] = ldatarange.splitRange(
+						new Double(2.0), lTotalRowCount, lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sLong) == 0) {
+				lColumnsSet[iter] = ldatarange.splitRange(
+						new Long(1), lTotalRowCount, lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sDate) == 0) {
+				lColumnsSet[iter] = ldatarange.splitRange(
+						new Date(), lTotalRowCount, lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sString) == 0) {
+				lColumnsSet[iter] = ldatarange.splitRange(
+						new String(), lTotalRowCount, lcolumnmd.getmColOrder(), lTableSlice, lcolumnmd.getmColStep());
+			} else {
+				// check if user defined
+				LOG.info("maybe user defined data set: " + lcolumnmd.getmColName());
+				
+				try {
+					String lExtraDataPath = extraconfig.instance().getExtraDataPath(lnewdatatype.value());
+					if (!extradatapool.instance().initdata(lnewdatatype.value(), lExtraDataPath)) {
+						return false;
+					}
+				} catch (IOException e) {
+					LOG.error(e.getLocalizedMessage());
+					LOG.error("column type " + lcolumnmd.getmColType().value() + " is not supported.");
+					return false;
+				}
+				
+				// we will not split any range for extra data
+				lColumnsSet[iter] = null;
+			}
+			
+			if (iter == lBenchColumnIndex) {
+				lBenchDataRange = ldatarange;
+			}
+		}
+		
+		if (lLinearColumnCount > 1) {
+			LOG.warn("more than one column is linear not random, which may cause some incorrect column data" +
+					"under some circumstance ");
+		}
+		
+		// all random, set rows
+		long lOneBatchRC = lTotalRowCount / lTableSlice;
+		long lLastBatchRC = lOneBatchRC + lTotalRowCount % lTableSlice;
+		
+		if (lBenchDataRange != null) {
+			lOneBatchRC = lBenchDataRange.getmStandardSliceRowCount();
+			lLastBatchRC = lBenchDataRange.getmLastSliceRowCount();
+		}
+		for (int iter = 0; iter < lTableSlice - 1; ++iter) {
+			mjobtablesmd[iter].setmTableRowcount(lOneBatchRC);
+		}
+		mjobtablesmd[lTableSlice - 1].setmTableRowcount(lLastBatchRC);	
+		
 		for (int jter = 0; jter < lTableSlice; ++jter) {
 			for (int iter = 0; iter < lColsMD.size(); ++iter) {
 				columnmd lcolumnmd = lColsMD.get(iter);			

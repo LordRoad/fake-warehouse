@@ -18,14 +18,31 @@
 package org.artemis.toolkit.table;
 
 /**
- * basicrow row
+ * row row
  * basicrow.java is written at Jun 15, 2014
  * @author return_jun
+ * @since 0.2
  */
-public class row {
-	private String[] mRowData;
+public final class row {
+	private char [] mRowData = null;
+	private int [] mIndex = null;
 	
-	public row() {
-		
+	public row(char [] irow, int [] index) {
+		mRowData = irow;
+		mIndex = index;
 	}
+	
+	public int getCellCount() {
+		return mIndex.length;
+	}
+	
+	/**
+	 * TBD.
+	 * @param index
+	 * @return
+	 */
+	public String getString(int index) {
+		return null;
+	}
+	
 }

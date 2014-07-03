@@ -31,6 +31,7 @@ import org.junit.runners.JUnit4;
  * enumtest.java is written at Jun 15, 2014
  * @author return_jun
  */
+@SuppressWarnings("deprecation")
 @RunWith(JUnit4.class)
 public class testenum {
 	

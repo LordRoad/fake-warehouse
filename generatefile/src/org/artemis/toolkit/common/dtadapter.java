@@ -19,7 +19,7 @@ package org.artemis.toolkit.common;
 
 import java.lang.reflect.Type;
 
-import org.artemis.toolkit.table.datatype;
+import org.artemis.toolkit.table.newdatatype;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -33,23 +33,24 @@ import com.google.gson.JsonSerializer;
  * dtadapter data type adapter for Gson
  * dtadapter.java is written at Jun 15, 2014
  * @author return_jun
+ * @since 0.2
  */
-class dtSerializer implements JsonSerializer<datatype> {
+class dtSerializer implements JsonSerializer<newdatatype> {
 
 	@Override
-	public JsonElement serialize(datatype src, Type typeOfSrc,
+	public JsonElement serialize(newdatatype src, Type typeOfSrc,
 			JsonSerializationContext context) {
 		return new JsonPrimitive(src.value());
 	}
 	
 }
 
-class dtDeserializer implements JsonDeserializer<datatype> {
+class dtDeserializer implements JsonDeserializer<newdatatype> {
 
 	@Override
-	public datatype deserialize(JsonElement json, Type typeOfT,
+	public newdatatype deserialize(JsonElement json, Type typeOfT,
 			JsonDeserializationContext context) throws JsonParseException {
-		return datatype.fromString(json.getAsJsonPrimitive().getAsString());
+		return newdatatype.fromString(json.getAsJsonPrimitive().getAsString());
 	}
 	
 }

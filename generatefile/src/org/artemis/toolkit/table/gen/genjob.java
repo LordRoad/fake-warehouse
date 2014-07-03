@@ -25,6 +25,7 @@ import org.artemis.toolkit.common.fileutils;
 import org.artemis.toolkit.common.sysconfig;
 import org.artemis.toolkit.metadata.columnmd;
 import org.artemis.toolkit.metadata.tablemd;
+import org.artemis.toolkit.table.newdatatype;
 import org.artemis.toolkit.table.tabledata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
  * genjob generate data
  * genjob.java is written at Jun 17, 2014
  * @author junli
+ * @since 0.2
  */
 public class genjob implements Runnable {
 	private static final Logger LOG = LoggerFactory.getLogger(genjob.class);
@@ -80,32 +82,43 @@ public class genjob implements Runnable {
 		mgendata = new gendata[lColumnCount];
 		for (int iter = 0; iter < lColumnCount; ++iter) {
 			columnmd lcolmd = mtablemd.getColumn(iter);
-			switch (lcolmd.getmColType()) {
-			case BOOLEAN :
-				mgendata[iter] = new genBoolean(lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
-				break;
-			case SHORT :
-				mgendata[iter] = new genShort(lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
-				break;
-			case INT :
-				mgendata[iter] = new genInteger(lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
-				break;
-			case FLOAT :
-			case DOUBLE :
-				mgendata[iter] = new genDouble(lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
-				break;
-			case LONG :
-				mgendata[iter] = new genLong(lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
-				break;
-			case DATE :
-				mgendata[iter] = new genDate(lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
-				break;
-			case STRING :
-				mgendata[iter] = new genString(lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
-				break;
-				default :
-					LOG.error(lcolmd.getmColType().value() + " is not supported now.");
+			newdatatype lnewdatatype = lcolmd.getmColType();
+			if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sBoolean) == 0) {	
+				mgendata[iter] = new genBoolean(
+						lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sShort) == 0) {
+				mgendata[iter] = new genShort(
+						lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sInt) == 0) {
+				mgendata[iter] = new genInteger(
+						lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sDouble) == 0) {
+				mgendata[iter] = new genDouble(
+						lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sLong) == 0) {
+				mgendata[iter] = new genLong(
+						lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sDate) == 0) {
+				mgendata[iter] = new genDate(
+						lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
+			}
+			else if (lnewdatatype.value().compareToIgnoreCase(newdatatype.innerDT.sString) == 0) {
+				mgendata[iter] = new genString(
+						lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
+			} else {
+				// extra data type
+				extradata lextradata = extradatapool.instance().getExtraData(lnewdatatype.value());
+				if (lextradata == null) {
 					return false;
+				}
+					
+				mgendata[iter] = gendata.getCustomizedGenerator(lextradata, 
+						lcolmd.getmColOrder(), lcolmd.getmColStep(), lcolmd.getmColRange());
 			}
 		}
 		

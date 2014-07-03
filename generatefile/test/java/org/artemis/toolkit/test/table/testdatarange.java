@@ -37,7 +37,7 @@ public class testdatarange {
 	public void booleanrange() {
 		
 		datarange ldatarange = new datarange("0~1");
-		String[] lRangeSet = ldatarange.splitRange(new Boolean(true), order.Ascend, 32, 1);
+		String[] lRangeSet = ldatarange.splitRange(new Boolean(true), 100, order.Ascend, 32, 1);
 		for (String lCurrentRange : lRangeSet) {
 			System.out.println(lCurrentRange);
 		}
@@ -48,18 +48,18 @@ public class testdatarange {
 	public void shortrange() {
 		
 		datarange ldatarange = new datarange("-256~255");
-		String[] lRangeSet = ldatarange.splitRange(new Short((short) 0), order.Descend, 10, 1);
+		String[] lRangeSet = ldatarange.splitRange(new Short((short) 0), 300, order.Descend, 10, 1);
 		for (String lCurrentRange : lRangeSet) {
 			System.out.println(lCurrentRange);
 		}
 	}
 	
 	@Test
-	@Ignore
+	//@Ignore
 	public void intrange() {
 		
 		datarange ldatarange = new datarange("1~10000");
-		String[] lRangeSet = ldatarange.splitRange(new Integer(0), order.Ascend, 32, 1);
+		String[] lRangeSet = ldatarange.splitRange(new Integer(0), 10000, order.Ascend, 32, 1);
 		for (String lCurrentRange : lRangeSet) {
 			System.out.println(lCurrentRange);
 		}
@@ -70,7 +70,7 @@ public class testdatarange {
 	public void longrange() {
 		
 		datarange ldatarange = new datarange("-1000000~1000000");
-		String[] lRangeSet = ldatarange.splitRange(new Long((long) 0), order.Ascend, 64, 1);
+		String[] lRangeSet = ldatarange.splitRange(new Long((long) 0), 1000000, order.Ascend, 64, 1);
 		for (String lCurrentRange : lRangeSet) {
 			System.out.println(lCurrentRange);
 		}
@@ -81,17 +81,18 @@ public class testdatarange {
 	public void longrange2() {
 		
 		datarange ldatarange = new datarange("-1000000~1000000");
-		String[] lRangeSet = ldatarange.splitRange(new Long((long) 0), order.Random, 32, 1);
+		String[] lRangeSet = ldatarange.splitRange(new Long((long) 0), 1000000, order.Random, 32, 1);
 		for (String lCurrentRange : lRangeSet) {
 			System.out.println(lCurrentRange);
 		}
 	}
 	
 	@Test
+	@Ignore
 	public void stringrange() {
 		
 		datarange ldatarange = new datarange("6");
-		String[] lRangeSet = ldatarange.splitRange(new String(), order.Ascend, 32, 1);
+		String[] lRangeSet = ldatarange.splitRange(new String(), 1000000, order.Ascend, 32, 1);
 		for (String lCurrentRange : lRangeSet) {
 			System.out.println(lCurrentRange);
 		}

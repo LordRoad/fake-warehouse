@@ -1,0 +1,6 @@
+{
+  "extra_config": {
+    "month": "./extra/month.json",
+    "week": "./extra/week.json"
+  }
+}

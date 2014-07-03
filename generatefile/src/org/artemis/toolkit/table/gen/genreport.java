@@ -35,6 +35,7 @@ import com.google.gson.annotations.SerializedName;
  * reportgenerate generate report with data
  * reportgenerate.java is written at Jun 15, 2014
  * @author return_jun
+ * @since 0.2
  */
 public class genreport {
 	private static final Logger LOG = LoggerFactory.getLogger(genreport.class);

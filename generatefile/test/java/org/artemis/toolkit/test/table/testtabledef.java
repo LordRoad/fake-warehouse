@@ -22,8 +22,8 @@ import java.io.IOException;
 import org.artemis.toolkit.common.configparser;
 import org.artemis.toolkit.metadata.columnmd;
 import org.artemis.toolkit.metadata.tablemd;
-import org.artemis.toolkit.table.analyticsops;
-import org.artemis.toolkit.table.datatype;
+import org.artemis.toolkit.table.newdatatype;
+import org.artemis.toolkit.table.analyticsops.order;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -40,11 +40,16 @@ public class testtabledef {
 	public void testfacttbl() throws IOException {
 		tablemd lfacttable = new tablemd("fact_table");
 		
-		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, analyticsops.order.Ascend, "0~"));
-		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, analyticsops.order.Random, "0~1"));
-		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, analyticsops.order.Random, "2012-06-28~2014-06-15"));
-		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, analyticsops.order.Random, "0~255"));
-		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
+		lfacttable.insertnewcolumn(new columnmd("index", 
+				newdatatype.fromString(newdatatype.innerDT.sLong), order.Ascend, "0-"));
+		lfacttable.insertnewcolumn(new columnmd("gender", 
+				newdatatype.fromString(newdatatype.innerDT.sShort), order.Random, "0-1"));
+		lfacttable.insertnewcolumn(new columnmd("date", 
+				newdatatype.fromString(newdatatype.innerDT.sDate), order.Random, "2012-06-28~2014-06-15"));
+		lfacttable.insertnewcolumn(new columnmd("description", 
+				newdatatype.fromString(newdatatype.innerDT.sString), order.Random, "0-255"));
+		lfacttable.insertnewcolumn(new columnmd("metric", 
+				newdatatype.fromString(newdatatype.innerDT.sLong)));
 		
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/tmp/testfacttbl.json");
@@ -66,11 +71,16 @@ public class testtabledef {
 	public void testLUtbl() throws IOException {
 		tablemd lfacttable = new tablemd("fact_table");
 		
-		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, analyticsops.order.Ascend, "0~"));
-		lfacttable.insertnewcolumn(new columnmd("gender", datatype.SHORT, analyticsops.order.Random, "0~1"));
-		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, analyticsops.order.Random, "2012-06-28~2014-06-15"));
-		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, analyticsops.order.Random, "0~255"));
-		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG));
+		lfacttable.insertnewcolumn(new columnmd("index", 
+				newdatatype.fromString(newdatatype.innerDT.sLong), order.Ascend, "0-"));
+		lfacttable.insertnewcolumn(new columnmd("gender", 
+				newdatatype.fromString(newdatatype.innerDT.sShort), order.Random, "0-1"));
+		lfacttable.insertnewcolumn(new columnmd("date", 
+				newdatatype.fromString(newdatatype.innerDT.sDate), order.Random, "2012-06-28~2014-06-15"));
+		lfacttable.insertnewcolumn(new columnmd("description", 
+				newdatatype.fromString(newdatatype.innerDT.sString), order.Random, "0-255"));
+		lfacttable.insertnewcolumn(new columnmd("metric", 
+				newdatatype.fromString(newdatatype.innerDT.sLong)));
 		
 		tablemd llookuptable = new tablemd("LU_date");
 		

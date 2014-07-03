@@ -17,14 +17,13 @@
  */
 
 /**
- * package-info TODO
- * package-info.java is written at Jun 21, 2014
- * @author return_jun
- */
-package org.artemis.toolkit.system;
-
-/**
+ * package-info
+ * 
  * this package is used to analyze running system including CPUs, Core, Memory, Disk, GPU, etc.
  * And based on system hardware information, make sure this tool can be run in full speed.
  * 
+ * package-info.java is written at Jun 21, 2014
+ * @author return_jun
+ * @since 0.2
  */
+package org.artemis.toolkit.system;

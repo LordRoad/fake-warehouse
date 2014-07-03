@@ -21,6 +21,7 @@ package org.artemis.toolkit.table.gen;
  * genfacttable TODO
  * genfacttable.java is written at Jun 15, 2014
  * @author return_jun
+ * @since 0.2
  */
 public class genfacttable {
 	

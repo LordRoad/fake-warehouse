@@ -26,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
  * ignoretag which fields and classes are ignored when doing serialization and de..
  * ignoretag.java is written at Jun 14, 2014
  * @author return_jun
+ * @since 0.2
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})

@@ -21,7 +21,10 @@ package org.artemis.toolkit.genfile;
  * fileconfig TODO
  * fileconfig.java is written at Jun 13, 2014
  * @author junli
+ * 
+ * @deprecated since 0.2
  */
+@Deprecated
 public class fileconfig {
 	
 }

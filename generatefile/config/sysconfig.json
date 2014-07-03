@@ -1,0 +1,7 @@
+{
+  "one_batch": "org.artemis.toolkit.gen.onebatch",
+  "range_split": "~",
+  "file_ext": ".csv",
+  "extra_data": "./extra/extra.json",
+  "log": ""
+}

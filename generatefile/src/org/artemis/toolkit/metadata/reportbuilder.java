@@ -31,6 +31,7 @@ import com.google.gson.annotations.SerializedName;
  * reportbuilder build report
  * reportbuilder.java is written at Jun 14, 2014
  * @author return_jun
+ * @since 0.2
  */
 public class reportbuilder {
 	private static final Logger LOG = LoggerFactory.getLogger(reportbuilder.class);

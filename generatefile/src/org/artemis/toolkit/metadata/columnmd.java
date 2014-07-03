@@ -18,22 +18,18 @@
 package org.artemis.toolkit.metadata;
 
 import org.artemis.toolkit.table.analyticsops;
-import org.artemis.toolkit.table.datatype;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.artemis.toolkit.table.newdatatype;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * columnmd TODO
  * columnmd.java is written at Jun 14, 2014
  * @author return_jun
+ * @since 0.2
  */
 public class columnmd {
-	private static final Logger LOG = LoggerFactory.getLogger(columnmd.class);
-	
 	@SerializedName("colname") private String mColName = null;
-	@SerializedName("coltype") private datatype mColType = datatype.INVALID;
+	@SerializedName("coltype") private newdatatype mColType = null;
 	
 	/**
 	 * if order is descend or ascend, it will NOT ignore range, or 5-10000, 5,6,7...
@@ -56,16 +52,16 @@ public class columnmd {
 		
 	}
 	
-	public columnmd(String icolname, datatype idatatype) {
+	public columnmd(String icolname, newdatatype idatatype) {
 		this(icolname, idatatype, analyticsops.order.Random, null);
 	}
 	
-	public columnmd(String icolname, datatype idatatype, analyticsops.order iorder, 
+	public columnmd(String icolname, newdatatype idatatype, analyticsops.order iorder, 
 			String irange) {
 		this(icolname, idatatype, iorder, irange, 1);
 	}
 
-	public columnmd(String icolname, datatype idatatype, analyticsops.order iorder, 
+	public columnmd(String icolname, newdatatype idatatype, analyticsops.order iorder, 
 			String irange, int istep) {
 		mColName = icolname;
 		mColType = idatatype;
@@ -82,11 +78,11 @@ public class columnmd {
 		this.mColName = mColName;
 	}
 
-	public datatype getmColType() {
+	public newdatatype getmColType() {
 		return mColType;
 	}
 
-	public void setmColType(datatype mColType) {
+	public void setmColType(newdatatype mColType) {
 		this.mColType = mColType;
 	}
 

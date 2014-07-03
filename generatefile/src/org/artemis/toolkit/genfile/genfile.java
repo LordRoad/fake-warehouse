@@ -24,7 +24,10 @@ import java.util.Scanner;
  * genfile TODO
  * genfile.java is written at Jun 15, 2014
  * @author return_jun
+ * 
+ * @deprecated since 0.2
  */
+@Deprecated
 public class genfile {
 	
 	public boolean parseconfigure(filedefinition ifiledefinition) {

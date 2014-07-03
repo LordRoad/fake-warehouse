@@ -30,6 +30,7 @@ import com.google.gson.annotations.SerializedName;
  * tablemd table md
  * tablemd.java is written at Jun 13, 2014
  * @author junli
+ * @since 0.2
  */
 public class tablemd {
 	private static final Logger LOG = LoggerFactory.getLogger(tablemd.class);

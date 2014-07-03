@@ -24,7 +24,7 @@ import org.artemis.toolkit.metadata.columnmd;
 import org.artemis.toolkit.metadata.reportbuilder;
 import org.artemis.toolkit.metadata.reportmd;
 import org.artemis.toolkit.metadata.tablemd;
-import org.artemis.toolkit.table.datatype;
+import org.artemis.toolkit.table.newdatatype;
 import org.artemis.toolkit.table.analyticsops.order;
 import org.artemis.toolkit.table.gen.genreport;
 import org.junit.Ignore;
@@ -46,24 +46,37 @@ public class testreportgen {
 	@Test
 	public void testReportGen() throws IOException {
 		
-		tablemd lfacttable = new tablemd("fact_table");
+tablemd lfacttable = new tablemd("fact_table");
 		
-		lfacttable.insertnewcolumn(new columnmd("index", datatype.LONG, order.Ascend, "1~10000000"));
-		lfacttable.insertnewcolumn(new columnmd("gender", datatype.BOOLEAN, order.Random, "0~1"));
-		lfacttable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
-		lfacttable.insertnewcolumn(new columnmd("description", datatype.STRING, order.Random, "10"));
-		lfacttable.insertnewcolumn(new columnmd("metric", datatype.LONG, order.Random, "1~10000"));
+		lfacttable.insertnewcolumn(new columnmd("index", 
+				newdatatype.fromString(newdatatype.innerDT.sInt), order.Descend, "0~9999999"));
+		lfacttable.insertnewcolumn(new columnmd("gender", 
+				newdatatype.fromString(newdatatype.innerDT.sBoolean), order.Random, "0~1"));
+		lfacttable.insertnewcolumn(new columnmd("date", 
+				newdatatype.fromString(newdatatype.innerDT.sDate), order.Random, "2012-06-28~2014-06-15"));
+		lfacttable.insertnewcolumn(new columnmd("description", 
+				newdatatype.fromString(newdatatype.innerDT.sString), order.Random, "10"));
+		lfacttable.insertnewcolumn(new columnmd("metric", 
+				newdatatype.fromString(newdatatype.innerDT.sLong), order.Random, "1~10000"));
 		lfacttable.setmTableSlice(32);
-		lfacttable.setmTableRowcount(10000000);
+		lfacttable.setmTableRowcount(10000);
 		
 		tablemd llookuptable = new tablemd("LU_date");
-		llookuptable.insertnewcolumn(new columnmd("id", datatype.INT, order.Ascend, "1~366"));
-		llookuptable.insertnewcolumn(new columnmd("date", datatype.DATE, order.Random, "2012-06-28~2014-06-15"));
+		llookuptable.insertnewcolumn(new columnmd("id", 
+				newdatatype.fromString(newdatatype.innerDT.sInt), order.Descend, "0~365"));
+		llookuptable.insertnewcolumn(new columnmd("week", 
+				newdatatype.fromString("week"), order.Random, ""));
+		llookuptable.insertnewcolumn(new columnmd("date", 
+				newdatatype.fromString(newdatatype.innerDT.sDate), order.Random, "2012-06-28~2014-06-15"));
 		llookuptable.setmTableRowcount(365);
 		
 		tablemd llookuptable2 = new tablemd("LU_index");
-		llookuptable2.insertnewcolumn(new columnmd("id", datatype.INT, order.Ascend, "1~10001"));
-		llookuptable2.insertnewcolumn(new columnmd("index", datatype.INT, order.Ascend, "1~100000"));
+		llookuptable2.insertnewcolumn(new columnmd("id", 
+				newdatatype.fromString(newdatatype.innerDT.sInt), order.Descend, "0~10000"));
+		llookuptable2.insertnewcolumn(new columnmd("month", 
+				newdatatype.fromString("month"), order.Random, ""));
+		llookuptable2.insertnewcolumn(new columnmd("index", 
+				newdatatype.fromString(newdatatype.innerDT.sInt), order.Ascend, "1~100000"));
 		llookuptable2.setmTableRowcount(10000);
 		llookuptable2.setmTableSlice(32);
 		

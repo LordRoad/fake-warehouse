@@ -18,9 +18,12 @@
 package org.artemis.toolkit.en;
 
 import java.io.IOException;
-
+import org.apache.log4j.PropertyConfigurator;
 import org.artemis.toolkit.common.sysconfig;
+import org.artemis.toolkit.table.gen.extraconfig;
 import org.artemis.toolkit.table.gen.genreport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * fakeentrance TODO
@@ -28,7 +31,8 @@ import org.artemis.toolkit.table.gen.genreport;
  * @author junli
  */
 public class fakeentrance {
-
+	private static final Logger LOG = LoggerFactory.getLogger(fakeentrance.class);
+	
 	/**
 	 * @param args
 	 */
@@ -38,24 +42,33 @@ public class fakeentrance {
 		{
 			System.setProperty(sysconfig.sLog4J, 
 					sysconfig.sDefaultLog4JPath);
+			
+			PropertyConfigurator.configure(sysconfig.sDefaultLog4JPathInPrograme);
 		}
 		
 		if (args == null || args.length < 1) {
-			System.out.println("please input report configuration file");
+			LOG.error("please input report configuration file");
 			return;
 		}
 		
 		try {
-			genreport lreportgenerate = genreport.createReportGenerate(args[0]);
+			sysconfig lsysconfig = new sysconfig();
+			if (!lsysconfig.init()) {
+				// ignore
+			}
 			
+			@SuppressWarnings("unused")
+			extraconfig lextraconfig = extraconfig.instance();
+			
+			// generate report
+			genreport lreportgenerate = genreport.createReportGenerate(args[0]);
 			lreportgenerate.generateReport();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getLocalizedMessage());
 		}
 		
-		System.out.println("");
+		LOG.info("zhimakaimen is exited");
 	}
 
 }

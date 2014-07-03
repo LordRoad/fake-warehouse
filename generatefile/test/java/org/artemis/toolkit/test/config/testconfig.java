@@ -19,7 +19,9 @@ package org.artemis.toolkit.test.config;
 
 import java.io.IOException;
 import org.artemis.toolkit.common.configparser;
+import org.artemis.toolkit.common.sysconfig;
 import org.artemis.toolkit.metadata.tablemd;
+import org.artemis.toolkit.table.gen.extraconfig;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +36,7 @@ import org.junit.runners.JUnit4;
 public class testconfig {
 	
 	@Test
-	//@Ignore
+	@Ignore
 	public void writetest() throws IOException {
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/tmp/lookuptblconfig.json");
@@ -46,7 +48,7 @@ public class testconfig {
 	}
 	
 	@Test
-	//@Ignore
+	@Ignore
 	public void readtest() throws IOException {
 		configparser lconfigparser = new configparser(System.getProperty("user.dir") +
 				"/lookuptblconfig.json");
@@ -55,6 +57,30 @@ public class testconfig {
 		if (llookuptable != null) {
 			System.out.println(llookuptable.getmTableName());
 		}
+		
+	}
+	
+	@Test
+	@Ignore
+	public void extratest() throws IOException {
+		
+		extraconfig lextraconfig = extraconfig.instance();
+		
+		lextraconfig.setExtraDataPath("week", "./extra/week.json");
+		lextraconfig.setExtraDataPath("month", "./extra/month.json");
+		lextraconfig.setExtraDataPath("city", "./extra/city.json");
+		lextraconfig.setExtraDataPath("state", "./extra/state.json");
+		lextraconfig.setExtraDataPath("country", "./extra/country.json");
+		
+		extraconfig.close();
+	}
+	
+	@Test
+	@Ignore
+	public void systest() throws IOException {
+		
+		sysconfig lsysconfig = new sysconfig();
+		lsysconfig.save();
 		
 	}
 	

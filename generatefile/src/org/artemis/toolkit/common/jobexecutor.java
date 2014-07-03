@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
  * jobexecutor simple wrapper for executor
  * jobexecutor.java is written at Jun 19, 2014
  * @author junli
+ * @since 0.2
  */
 public class jobexecutor {
 	private static final Logger LOG = LoggerFactory.getLogger(jobexecutor.class);
