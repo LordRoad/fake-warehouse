@@ -19,16 +19,7 @@ this tool can generate fake data with good performance. user needs to define rep
 * `column`
     - colname
     - coltype
-        it can be inner supported data type (**int, short, boolean, float, double, long, date, string**) or user defined data type which should be extra data which in folder extra such as
-        ```
-        {
-          "extra_config": {
-            "month": "./extra/month.json",
-            "week": "./extra/week.json"
-          }
-        }
-        ```
-        then extra data type month, week can be used as column type
+        it can be inner supported data type (**int, short, boolean, float, double, long, date, string**) or user defined data type.
     - colorder
         it can be **desc** (descend), **asc** (ascend), **rand** (random)
     - coldstep
@@ -37,7 +28,19 @@ this tool can generate fake data with good performance. user needs to define rep
         column range, example:
             date range: "2012-06-28~2014-06-15"
             int range: "0~9999999"
-for example, you can run tests from code, it contains some basic tests. Or you can refer to tmp/testReportGen.json.
+
+#### extra data
+extra data is used to expand inner data type called user defined data type which in extra folder, and the basic configure as:
+```
+{
+    "extra_config": {
+        "month": "./extra/month.json",
+        "week": "./extra/week.json"
+    }
+}
+```
+then extra data type month, week can be used as column type. cell data is retrieved from data set.
+More, you can run tests from code, it contains some basic tests. Or you can refer to tmp/testReportGen.json.
 
 ## Third Party Library
 * [gson][]
