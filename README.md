@@ -1,7 +1,7 @@
-# Fake Warehouse
+## Fake Warehouse
 
 this tool can generate fake data with good performance. user needs to define report which includes look up tables and fact table (center table). there should be relationship between these tables, it will be supported in next release. And Project Manager & Launcher **AY** wants to make it easy to use and well defined.
-## Report Definition
+### Report Definition
 * `report`
     - storage_path : path to store the report
     - report_name : report name (folder)
@@ -42,13 +42,13 @@ extra data is used to expand inner data type called user defined data type which
 then extra data type month, week can be used as column type. cell data is retrieved from data set.
 More, you can run tests from code, it contains some basic tests. Or you can refer to tmp/testReportGen.json.
 
-## Third Party Library
+### Third Party Library
 * [gson][]
 * [common math][]
 
 [gson]: https://code.google.com/p/google-gson/
 [common math]: http://commons.apache.org/proper/commons-math/
 
-## About
+### About
 this tool is lanuched by PM **AY** and me, it's used to generate big data always **billions of rows**. it works well and performance is not so bad.
 
